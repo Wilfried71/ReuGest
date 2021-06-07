@@ -45,9 +45,9 @@ public class MenuFrame extends JFrame {
 		itemUtilisateurs = new JMenuItem("Utilisateurs");
 		itemSalles = new JMenuItem("Salles");
 		itemEquipements = new JMenuItem("Equipements");
-		itemReserver = new JMenuItem("R�server");
+		itemReserver = new JMenuItem("Réserver");
 		itemImprimer = new JMenuItem("Imprimer");
-		itemParametres = new JMenuItem("Param�tres");
+		itemParametres = new JMenuItem("Paramètres");
 		itemAbout = new JMenuItem("A propos");
 		// img = new ImageIcon("logoReugest.jpg");
 		gestionMenu.add(itemUtilisateurs);
