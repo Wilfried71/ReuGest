@@ -182,8 +182,26 @@ public class UsersFrame extends BaseFrame {
         this.pRight.add(this.validateButton);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
         // Validate button action listener
-        validateButton.addActionListener(new ValidateButtonListener<Utilisateur>(Utilisateur.class));
+        
         // Add button event listener
+        validateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String Nom = txtNom.getText();
+                System.out.println(Nom);
+                String Prenom = txtPrenom.getText();
+                System.out.println(Prenom);
+                String Email = txtEmail.getText();
+                System.out.println(Email);
+                String Fonction = cboFonction.getSelectedItem().toString();
+                System.out.println(Fonction);
+                String Service = cboService.getSelectedItem().toString();
+                System.out.println(Service);
+                String Droit = cboDroit.getSelectedItem().toString();
+                System.out.println(Droit);
+                        
+            }
+        });
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

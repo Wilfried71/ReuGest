@@ -22,6 +22,7 @@ public class ValidateButtonListener<T> implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         System.out.println(type.toString()); //To change body of generated methods, choose Tools | Templates.
     }
     
