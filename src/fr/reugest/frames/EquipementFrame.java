@@ -1,7 +1,8 @@
 package fr.reugest.frames;
 
-import fr.reugest.frames.createmodal.UserCreateModal;
+import fr.reugest.frames.createmodal.EquipementCreateModal;
 import fr.reugest.main.Globals;
+import fr.reugest.models.Affectation;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
@@ -17,10 +18,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import fr.reugest.models.Equipement;
-import fr.reugest.models.light.UtilisateurLight;
+import fr.reugest.models.light.AffectationLight;
 import fr.thomas.orm.Model;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -86,7 +88,9 @@ public class EquipementFrame extends BaseFrame {
             public void valueChanged(ListSelectionEvent e) {
                 // If not reloading
                 if (table.getSelectedRow() != -1) {
+                    // Enable action buttons
                     validateButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
 
                     selectedEquipement = listEquipement.get(table.getSelectedRow());
                     // Fill form fields
@@ -149,16 +153,16 @@ public class EquipementFrame extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Instanciate Model
-                Model model = new Model<UtilisateurLight>(UtilisateurLight.class);
+                Model model = new Model<Equipement>(Equipement.class);
                 try {
-                    // Update user
-                    model.update(new Equipement(null,txtLibelle.getText()));
-                    
-                    JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
+                    // Update equipement
+                    model.update(new Equipement(selectedEquipement.getId(), txtLibelle.getText()));
+
+                    JOptionPane.showMessageDialog(null, "Équipement modifié avec succès");
 
                     // Reload frame to replace data
                     Globals.reloadEquipementFrame();
-                    
+
                 } catch (Exception ex) {
                     Logger.getLogger(EquipementFrame.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
@@ -169,8 +173,38 @@ public class EquipementFrame extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setEnabled(false);
-                UserCreateModal createModal = new UserCreateModal();
+                EquipementCreateModal createModal = new EquipementCreateModal();
                 createModal.setVisible(true);
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'enregistrement ?\n\nCette action est irréversible.", "Select an Option...",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                // If YES
+                if (input == 0) {
+                    try {
+                        // Delete relational dependencies
+                        Model affectationModel = new Model<AffectationLight>(AffectationLight.class);
+                        List<AffectationLight> affectations = affectationModel.query("SELECT * FROM affectation WHERE equipement = ?", Arrays.asList(selectedEquipement.getId()));
+
+                        // If there is at least one association with this equipement
+                        if (!affectations.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "Cet équipement ne peut pas être supprimmé\ncar il est lié à au moins une salle.","Erreur",JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            // Delete object
+                            (new Model<>(Equipement.class)).delete(selectedEquipement);
+
+                            JOptionPane.showMessageDialog(null, "Équipement correctement supprimé.");
+                        }
+                        // Reload frame
+                        Globals.reloadEquipementFrame();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
+                    }
+                }
             }
         });
     }
@@ -178,7 +212,7 @@ public class EquipementFrame extends BaseFrame {
     /**
      * Load users in table
      */
-    public void loadEquipementsInJTable() {                    
+    public void loadEquipementsInJTable() {
 
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
             @Override

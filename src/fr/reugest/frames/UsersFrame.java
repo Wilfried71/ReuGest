@@ -25,6 +25,7 @@ import fr.reugest.models.light.UtilisateurLight;
 import fr.thomas.orm.Model;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -98,7 +99,7 @@ public class UsersFrame extends BaseFrame {
         }
 
         try {
-            this.listUtilisateurs = utilisateurModel.findAll();
+            this.listUtilisateurs = utilisateurModel.query("SELECT * FROM utilisateur WHERE isDeleted=?", Arrays.asList(false));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,7 +119,9 @@ public class UsersFrame extends BaseFrame {
             public void valueChanged(ListSelectionEvent e) {
                 // If not reloading
                 if (table.getSelectedRow() != -1) {
+                    // Enable action buttons
                     validateButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
 
                     selectedUser = listUtilisateurs.get(table.getSelectedRow());
                     // Fill form fields
@@ -220,12 +223,12 @@ public class UsersFrame extends BaseFrame {
                 try {
                     // Update user
                     model.update(updatedUser);
-                    
+
                     JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
 
                     // Reload frame to replace data
                     Globals.reloadUsersFrame();
-                    
+
                 } catch (Exception ex) {
                     Logger.getLogger(UsersFrame.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
@@ -240,12 +243,35 @@ public class UsersFrame extends BaseFrame {
                 createModal.setVisible(true);
             }
         });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'enregistrement ?\n\nCette action est irréversible.", "Select an Option...",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                // If YES
+                if (input == 0) {
+                    try {
+                        Model<UtilisateurLight> model = new Model<>(UtilisateurLight.class);
+                        UtilisateurLight light = new UtilisateurLight(selectedUser.getId(),
+                                selectedUser.getNom(), selectedUser.getPrenom(), selectedUser.getEmail(),
+                                selectedUser.getPassword(), selectedUser.getDroit().getId(),
+                                selectedUser.getService().getId(), selectedUser.getFonction().getId(), true);
+                        // Update in DB
+                        model.update(light);
+                        JOptionPane.showMessageDialog(null, "Utilisateur correctement supprimé.");
+                        Globals.reloadUsersFrame();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
+                    }
+                }
+            }
+        });
     }
 
     /**
      * Load users in table
      */
-    public void loadUsersInJTable() {                    
+    public void loadUsersInJTable() {
 
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
             @Override

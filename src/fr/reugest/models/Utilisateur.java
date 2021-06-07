@@ -8,114 +8,124 @@ import fr.thomas.orm.annotations.Table;
 @Table(name = "utilisateur")
 public class Utilisateur {
 
-	@PrimaryKey
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "nom")
-	private String nom;
-	
-	@Column(name = "prenom")
-	private String prenom;
-	
-	@Column(name = "email")
-	private String email;
-	
-	@Column(name = "password")
-	private String password;
-	
-	@ForeignKey(field = "id", table = "droit")
-	@Column(name = "droit")
-	private Droit droit;
-	
-	@ForeignKey(field = "id", table = "service")
-	@Column(name = "service")
-	private Service service;
-	
-	@ForeignKey(field = "id", table = "fonction")
-	@Column(name = "fonction")
-	private Fonction fonction;
+    @PrimaryKey
+    @Column(name = "id")
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "nom")
+    private String nom;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(name = "prenom")
+    private String prenom;
 
-	public String getNom() {
-		return nom;
-	}
+    @Column(name = "email")
+    private String email;
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    @Column(name = "password")
+    private String password;
+    
+    @Column(name = "isDeleted")
+    private Boolean isDeleted;
 
-	public String getPrenom() {
-		return prenom;
-	}
+    @ForeignKey(field = "id", table = "droit")
+    @Column(name = "droit")
+    private Droit droit;
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
+    @ForeignKey(field = "id", table = "service")
+    @Column(name = "service")
+    private Service service;
 
-	public String getEmail() {
-		return email;
-	}
+    @ForeignKey(field = "id", table = "fonction")
+    @Column(name = "fonction")
+    private Fonction fonction;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getNom() {
+        return nom;
+    }
 
-	public Droit getDroit() {
-		return droit;
-	}
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public void setDroit(Droit droit) {
-		this.droit = droit;
-	}
+    public String getPrenom() {
+        return prenom;
+    }
 
-	public Service getService() {
-		return service;
-	}
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
 
-	public void setService(Service service) {
-		this.service = service;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public Fonction getFonction() {
-		return fonction;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setFonction(Fonction fonction) {
-		this.fonction = fonction;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	protected Utilisateur(Long id, String nom, String prenom, String email, String password, Droit droit,
-			Service service, Fonction fonction) {
-		super();
-		this.id = id;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.email = email;
-		this.password = password;
-		this.droit = droit;
-		this.service = service;
-		this.fonction = fonction;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public Utilisateur() {
-		super();
-	}
-	
-	
+    public Droit getDroit() {
+        return droit;
+    }
+
+    public void setDroit(Droit droit) {
+        this.droit = droit;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public Fonction getFonction() {
+        return fonction;
+    }
+
+    public void setFonction(Fonction fonction) {
+        this.fonction = fonction;
+    }
+    
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    protected Utilisateur(Long id, String nom, String prenom, String email, String password, Droit droit,
+            Service service, Fonction fonction, Boolean isDeleted) {
+        super();
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.password = password;
+        this.droit = droit;
+        this.service = service;
+        this.fonction = fonction;
+    }
+
+    public Utilisateur() {
+        super();
+    }
+
 }

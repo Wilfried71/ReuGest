@@ -24,7 +24,7 @@ import javax.swing.JTable;
  *
  */
 public class BaseFrame extends JFrame {
-
+    
     private static final long serialVersionUID = -5318525704078317102L;
 
     /**
@@ -34,20 +34,20 @@ public class BaseFrame extends JFrame {
     protected JPanel panel, pLeft, pCenter, pRight;
     protected JButton validateButton, addButton, deleteButton;
     protected JTable table;
-
+    
     private int BUTTON_SIZE = 42;
     private int BUTTON_TAB_WIDTH = 50;
     private int MIN_WIDTH = 720;
     private int MIN_HEIGHT = 420;
-
+    
     protected enum State {
         READING,
         EDITING,
         CREATING
     }
-
+    
     protected State state;
-
+    
     public BaseFrame() throws HeadlessException {
         super("Base JFrame");
         // Instanciate components
@@ -67,7 +67,7 @@ public class BaseFrame extends JFrame {
         deleteButton = new JButton(new ImageIcon(getClass().getResource("/delete.png")));
         deleteButton.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
         deleteButton.setToolTipText("Supprimer");
-
+        deleteButton.setEnabled(false);
         /**
          * Add resize event
          */
@@ -107,7 +107,7 @@ public class BaseFrame extends JFrame {
         panel.add(pLeft);
         panel.add(pCenter);
         panel.add(pRight);
-
+        
         this.add(panel);
         this.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

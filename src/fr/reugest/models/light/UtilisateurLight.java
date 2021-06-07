@@ -31,6 +31,9 @@ public class UtilisateurLight {
 
     @Column(name = "fonction")
     private Long idFonction;
+    
+    @Column(name = "isDeleted")
+    private Boolean isDeleted;
 
     public Long getId() {
         return id;
@@ -95,13 +98,21 @@ public class UtilisateurLight {
     public void setIdFonction(Long idFonction) {
         this.idFonction = idFonction;
     }
+    
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
     public UtilisateurLight() {
         super();
     }
 
-    protected UtilisateurLight(Long id, String nom, String prenom, String email, String password, Long idDroit,
-            Long idService, Long idFonction) {
+    public UtilisateurLight(Long id, String nom, String prenom, String email, String password, Long idDroit,
+            Long idService, Long idFonction, Boolean isDeleted) {
         super();
         this.id = id;
         this.nom = nom;
@@ -111,14 +122,6 @@ public class UtilisateurLight {
         this.idDroit = idDroit;
         this.idService = idService;
         this.idFonction = idFonction;
+        this.isDeleted = isDeleted;
     }
-
-    public void setLibelle(String libelle) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public void setPlaces(String places) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }
