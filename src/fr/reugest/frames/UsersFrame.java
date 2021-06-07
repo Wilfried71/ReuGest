@@ -221,8 +221,6 @@ public class UsersFrame extends BaseFrame {
                 try {
                     // Update user
                     model.update(updatedUser);
-                    // Reload data in JTable
-                    listUtilisateurs = utilisateurModel.findAll();
                     
                     JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
 

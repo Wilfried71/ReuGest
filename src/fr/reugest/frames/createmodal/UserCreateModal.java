@@ -143,11 +143,11 @@ public class UserCreateModal extends JFrame {
                 newUser.setIdService(((Service) cboService.getSelectedItem()).getId());
                 try {
                     utilisateurModel.create(newUser);
-
+                    
                     JOptionPane.showMessageDialog(null, "Utilisateur créé avec succès");
                     // Close modal
                     dispose();
-                    // Reload frame to replace data
+                       // Reload frame to replace data
                     Globals.reloadUsersFrame();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
