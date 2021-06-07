@@ -9,7 +9,6 @@ import fr.reugest.main.Globals;
 import fr.reugest.models.Droit;
 import fr.reugest.models.Fonction;
 import fr.reugest.models.Service;
-import fr.reugest.models.Utilisateur;
 import fr.reugest.models.light.UtilisateurLight;
 import fr.thomas.orm.Model;
 import java.awt.GridLayout;
@@ -19,8 +18,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -146,14 +143,12 @@ public class UserCreateModal extends JFrame {
                 newUser.setIdService(((Service) cboService.getSelectedItem()).getId());
                 try {
                     utilisateurModel.create(newUser);
-                    
+
                     JOptionPane.showMessageDialog(null, "Utilisateur créé avec succès");
                     // Close modal
                     dispose();
-                    // Enable user frame and load new data
-                    Globals.usersFrame.setEnabled(true);
-                    Globals.usersFrame.loadFormData();
-                    Globals.usersFrame.loadUsersInJTable();
+                    // Reload frame to replace data
+                    Globals.reloadUsersFrame();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
                 }
