@@ -112,6 +112,14 @@ public class UtilisateurLight {
 		this.idService = idService;
 		this.idFonction = idFonction;
 	}
+
+    public void setLibelle(String libelle) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void setPlaces(String places) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 	
 	
 	

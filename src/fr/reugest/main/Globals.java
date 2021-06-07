@@ -1,6 +1,7 @@
 package fr.reugest.main;
 
 import fr.reugest.frames.MenuFrame;
+import fr.reugest.frames.RoomsFrame;
 import fr.reugest.frames.UsersFrame;
 
 /**
@@ -16,6 +17,8 @@ public class Globals {
 	public static MenuFrame mainMenu;
         
         public static UsersFrame usersFrame;
+        
+        public static RoomsFrame roomsFrame;
 	
 	public static String version;
 	

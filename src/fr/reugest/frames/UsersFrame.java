@@ -1,7 +1,6 @@
 package fr.reugest.frames;
 
 import fr.reugest.frames.createmodal.UserCreateModal;
-import fr.reugest.listeners.ValidateButtonListener;
 import fr.reugest.main.Globals;
 import java.awt.Dimension;
 import java.awt.GridLayout;

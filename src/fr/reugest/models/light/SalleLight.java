@@ -5,57 +5,56 @@ import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
 /**
- * 
+ *
  * @author tpeyr
  *
  */
 @Table(name = "salle")
 public class SalleLight {
 
-	@PrimaryKey
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "libelle")
-	private String libelle;
-	
-	@Column(name = "places")
-	private Long places;
+    @PrimaryKey
+    @Column(name = "id")
+    private Long id;
 
-	protected SalleLight(Long id, String libelle, Long places) {
-		super();
-		this.id = id;
-		this.libelle = libelle;
-		this.places = places;
-	}
+    @Column(name = "libelle")
+    private String libelle;
 
-	protected SalleLight() {
-		super();
-	}
+    @Column(name = "places")
+    private Long places;
 
-	public Long getId() {
-		return id;
-	}
+    public SalleLight(Long id, String libelle, Long places) {
+        super();
+        this.id = id;
+        this.libelle = libelle;
+        this.places = places;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public SalleLight() {
+        super();
+    }
 
-	public String getLibelle() {
-		return libelle;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getPlaces() {
-		return places;
-	}
+    public String getLibelle() {
+        return libelle;
+    }
 
-	public void setPlaces(Long places) {
-		this.places = places;
-	}
-	
-	
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public Long getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(Long places) {
+        this.places = places;
+    }
+
 }
