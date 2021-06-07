@@ -32,7 +32,7 @@ public class BaseFrame extends JFrame {
      * content of the frame.
      */
     protected JPanel panel, pLeft, pCenter, pRight;
-    protected JButton cancelButton, validateButton, addButton, deleteButton;
+    protected JButton validateButton, addButton, deleteButton;
     protected JTable table;
 
     private int BUTTON_SIZE = 42;
@@ -58,16 +58,6 @@ public class BaseFrame extends JFrame {
 
         // Create action buttons
         this.validateButton = new JButton("Valider");
-        this.cancelButton = new JButton("Annuler");
-        this.cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Click");
-                pLeft.setEnabled(true);
-                // Clear selectioned lines
-                table.clearSelection();
-            }
-        });
 
         // Add button
         addButton = new JButton(new ImageIcon(getClass().getResource("/plus.png")));

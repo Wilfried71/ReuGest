@@ -75,7 +75,7 @@ public class UsersFrame extends BaseFrame {
     /**
      * Load data from DB to fill comboboxes
      */
-    private void loadFormData() {
+    public void loadFormData() {
         try {
             this.listFonctions = fonctionModel.findAll();
         } catch (Exception e) {
@@ -178,7 +178,7 @@ public class UsersFrame extends BaseFrame {
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
-        this.pRight.add(this.cancelButton);
+        this.pRight.add(new JLabel());
         this.pRight.add(this.validateButton);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
         // Validate button action listener
@@ -197,7 +197,7 @@ public class UsersFrame extends BaseFrame {
     /**
      * Load users in table
      */
-    private void loadUsersInJTable() {
+    public void loadUsersInJTable() {
 
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -220,7 +220,7 @@ public class UsersFrame extends BaseFrame {
      * @param id
      * @return
      */
-    private Fonction getFonctionFromId(Long id) {
+    public Fonction getFonctionFromId(Long id) {
         for (Fonction f : this.listFonctions) {
             if (f.getId().equals(id)) {
                 return f;
@@ -229,7 +229,7 @@ public class UsersFrame extends BaseFrame {
         return null;
     }
 
-    private Droit getDroitFromId(Long id) {
+    public Droit getDroitFromId(Long id) {
         for (Droit d : this.listDroits) {
             if (d.getId().equals(id)) {
                 return d;
@@ -238,7 +238,7 @@ public class UsersFrame extends BaseFrame {
         return null;
     }
 
-    private Service getServiceFromId(Long id) {
+    public Service getServiceFromId(Long id) {
         for (Service s : this.listServices) {
             if (s.getId().equals(id)) {
                 return s;
