@@ -19,6 +19,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import fr.reugest.models.Droit;
+import fr.reugest.models.Equipement;
 import fr.reugest.models.Fonction;
 import fr.reugest.models.Salle;
 import fr.reugest.models.Service;
@@ -30,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 public class RoomsFrame extends BaseFrame {
@@ -39,6 +41,7 @@ public class RoomsFrame extends BaseFrame {
     private JTextField txtLibelle, txtPlaces;
 
     private Model<Salle> salleModel;
+    private Model<Equipement> equipementModel;
 
     private List<Salle> listSalles;
 
@@ -48,6 +51,7 @@ public class RoomsFrame extends BaseFrame {
     private Salle selectedSalle;
 
     private String[] columns = new String[]{"Libelle", "Places"};
+    private List<Equipement> listEquipements;
 
     public RoomsFrame() {
         super();
@@ -60,6 +64,7 @@ public class RoomsFrame extends BaseFrame {
          * Init models
          */
         salleModel = new Model<Salle>(Salle.class);
+        equipementModel = new Model<Equipement>(Equipement.class);
 
         // Load data
         this.loadFormData();
@@ -77,6 +82,12 @@ public class RoomsFrame extends BaseFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
+        try {
+            this.listEquipements = equipementModel.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -85,7 +96,7 @@ public class RoomsFrame extends BaseFrame {
     private void loadLeftPanel() {
 
         // actual data for the table in a 2d array
-        loadUsersInJTable();
+        loadSallesInJTable();
 
         this.table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
@@ -118,6 +129,8 @@ public class RoomsFrame extends BaseFrame {
      * Load right panel components (Form)
      */
     private void loadRightPanel() {
+        
+        //loadEquipementsInJTable();
         // Set right panel
         this.pRight.setLayout(new GridLayout(10, 2, 25, 10));
 
@@ -128,6 +141,15 @@ public class RoomsFrame extends BaseFrame {
         this.pRight.add(new JLabel("Places : ", JLabel.RIGHT));
         txtPlaces = new JTextField();
         this.pRight.add(txtPlaces);
+        
+        for(Equipement e: listEquipements){
+            this.pRight.add(new JLabel("Equipement : ", JLabel.RIGHT));
+            JCheckBox checkbox = new JCheckBox(e.getLibelle());
+            this.pRight.add(checkbox);
+        }
+
+        
+
         /**
          * Create empty JLabel to fill
          */
@@ -138,6 +160,15 @@ public class RoomsFrame extends BaseFrame {
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        
+        
+        
         this.pRight.add(this.validateButton);
         this.validateButton.setEnabled(false);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -186,7 +217,8 @@ public class RoomsFrame extends BaseFrame {
     /**
      * Load users in table
      */
-    public void loadUsersInJTable() {
+    
+    public void loadSallesInJTable() {
 
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -200,13 +232,30 @@ public class RoomsFrame extends BaseFrame {
                     .addRow(new Object[]{u.getLibelle(), u.getPlaces()});
         }
         this.table = new JTable(tableModel);
+        
+        /*JScrollPane pane = new JScrollPane(table);
+        this.pLeft.add(pane);
+        this.table.setPreferredScrollableViewportSize(new Dimension(100, 100));
+        this.table.setFillsViewportHeight(true);*/
+        this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    public void loadEquipementsInJTable() {
+
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        for (Equipement u : this.listEquipements) {
+            tableModel
+                    .addRow(new Object[]{u.getLibelle()});
+        }
+        this.table = new JTable(tableModel);
+        
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    /**
-     * Return the function of the list from its id
-     *
-     * @param id
-     * @return
-     */
+
 }

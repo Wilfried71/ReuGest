@@ -44,4 +44,11 @@ public class Equipement {
     public Equipement() {
         super();
     }
+
+    @Override
+    public String toString() {
+        return this.libelle;
+    }
+    
+    
 }
