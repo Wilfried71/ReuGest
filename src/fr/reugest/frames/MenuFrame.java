@@ -18,7 +18,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import fr.reugest.frames.BaseFrame.State;
 import fr.reugest.main.Globals;
 
 public class MenuFrame extends JFrame {

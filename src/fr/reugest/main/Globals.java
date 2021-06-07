@@ -1,6 +1,7 @@
 package fr.reugest.main;
 
 import fr.reugest.frames.MenuFrame;
+import fr.reugest.frames.UsersFrame;
 
 /**
  * Class of global variables
@@ -13,6 +14,8 @@ public class Globals {
 	 * Main menu frame (stored to navigate properly between different frames)
 	 */
 	public static MenuFrame mainMenu;
+        
+        public static UsersFrame usersFrame;
 	
 	public static String version;
 	
