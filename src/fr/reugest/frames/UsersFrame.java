@@ -22,9 +22,13 @@ import fr.reugest.models.Droit;
 import fr.reugest.models.Fonction;
 import fr.reugest.models.Service;
 import fr.reugest.models.Utilisateur;
+import fr.reugest.models.light.UtilisateurLight;
 import fr.thomas.orm.Model;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class UsersFrame extends BaseFrame {
 
@@ -113,7 +117,9 @@ public class UsersFrame extends BaseFrame {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                Utilisateur selectedUser = listUtilisateurs.get(table.getSelectedRow());
+                validateButton.setEnabled(true);
+                
+                selectedUser = listUtilisateurs.get(table.getSelectedRow());
                 // Fill form fields
                 txtEmail.setText(selectedUser.getEmail());
                 txtNom.setText(selectedUser.getNom());
@@ -180,6 +186,7 @@ public class UsersFrame extends BaseFrame {
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(this.validateButton);
+        this.validateButton.setEnabled(false);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
         // Validate button action listener
         
@@ -187,18 +194,40 @@ public class UsersFrame extends BaseFrame {
         validateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String Nom = txtNom.getText();
-                System.out.println(Nom);
-                String Prenom = txtPrenom.getText();
-                System.out.println(Prenom);
-                String Email = txtEmail.getText();
-                System.out.println(Email);
-                String Fonction = cboFonction.getSelectedItem().toString();
-                System.out.println(Fonction);
-                String Service = cboService.getSelectedItem().toString();
-                System.out.println(Service);
-                String Droit = cboDroit.getSelectedItem().toString();
-                System.out.println(Droit);
+                String nom = txtNom.getText();
+                //System.out.println(Nom);
+                String prenom = txtPrenom.getText();
+                //System.out.println(Prenom);
+                String email = txtEmail.getText();
+                //System.out.println(Email);
+                Fonction fonction = (Fonction)cboFonction.getSelectedItem();
+                //System.out.println(Fonction);
+                Service service = (Service)cboService.getSelectedItem();
+                //System.out.println(Service);
+                Droit droit = (Droit)cboDroit.getSelectedItem();
+                //System.out.println(Droit);
+                //utilisateurModel.update(selectedUser)
+                System.out.println(selectedUser);
+                UtilisateurLight updatedUser = new UtilisateurLight();
+                updatedUser.setNom(nom);
+                updatedUser.setPrenom(prenom);
+                updatedUser.setEmail(email);
+                updatedUser.setIdFonction(fonction.getId());
+                updatedUser.setIdService(service.getId());
+                updatedUser.setIdDroit(droit.getId());
+                updatedUser.setId(selectedUser.getId());
+                updatedUser.setPassword(selectedUser.getPassword());
+                Model model = new Model<UtilisateurLight>(UtilisateurLight.class);
+                try {
+                    model.update(updatedUser);
+                    JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
+                } catch (Exception ex) {
+                    Logger.getLogger(UsersFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
+                }
+                
+                
+								
                         
             }
         });
