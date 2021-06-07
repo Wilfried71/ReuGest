@@ -137,6 +137,8 @@ public class EquipementFrame extends BaseFrame {
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
         this.pRight.add(this.validateButton);
         this.validateButton.setEnabled(false);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));

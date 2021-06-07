@@ -6,48 +6,47 @@ import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
 /**
- * 
+ *
  * @author tpeyr
  *
  */
 @Table(name = "affectation")
 public class Affectation {
 
-	@PrimaryKey
-	@Column(name = "equipement")
-	@ForeignKey(field = "id", table = "equipement")
-	private Equipement equipement;
-	
-	@PrimaryKey
-	@Column(name = "salle")
-	@ForeignKey(field = "id", table = "salle")
-	private Salle salle;
+    @PrimaryKey
+    @Column(name = "equipement")
+    @ForeignKey(field = "id", table = "equipement")
+    private Equipement equipement;
 
-	protected Affectation(Equipement equipement, Salle salle) {
-		super();
-		this.equipement = equipement;
-		this.salle = salle;
-	}
+    @PrimaryKey
+    @Column(name = "salle")
+    @ForeignKey(field = "id", table = "salle")
+    private Salle salle;
 
-	protected Affectation() {
-		super();
-	}
+    public Affectation(Equipement equipement, Salle salle) {
+        super();
+        this.equipement = equipement;
+        this.salle = salle;
+    }
 
-	public Equipement getEquipement() {
-		return equipement;
-	}
+    public Affectation() {
+        super();
+    }
 
-	public void setEquipement(Equipement equipement) {
-		this.equipement = equipement;
-	}
+    public Equipement getEquipement() {
+        return equipement;
+    }
 
-	public Salle getSalle() {
-		return salle;
-	}
+    public void setEquipement(Equipement equipement) {
+        this.equipement = equipement;
+    }
 
-	public void setSalle(Salle salle) {
-		this.salle = salle;
-	}
-	
-	
+    public Salle getSalle() {
+        return salle;
+    }
+
+    public void setSalle(Salle salle) {
+        this.salle = salle;
+    }
+
 }

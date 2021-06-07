@@ -5,43 +5,43 @@ import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
 /**
- * 
+ *
  * @author tpeyr
  *
  */
 @Table(name = "equipement")
 public class Equipement {
 
-	@PrimaryKey
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "libelle")
-	private String libelle;
+    @PrimaryKey
+    @Column(name = "id")
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "libelle")
+    private String libelle;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public String getLibelle() {
-		return libelle;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Equipement(Long id, String libelle) {
-		super();
-		this.id = id;
-		this.libelle = libelle;
-	}
+    public String getLibelle() {
+        return libelle;
+    }
 
-	public Equipement() {
-		super();
-	}
+    public void setLibelle(String libelle) {
+        this.libelle = libelle;
+    }
+
+    public Equipement(Long id, String libelle) {
+        super();
+        this.id = id;
+        this.libelle = libelle;
+    }
+
+    public Equipement() {
+        super();
+    }
 }

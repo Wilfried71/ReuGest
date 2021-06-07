@@ -8,70 +8,69 @@ import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
 /**
- * 
+ *
  * @author tpeyr
  *
  */
 @Table(name = "reunion")
 public class Reunion {
 
-	@PrimaryKey
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "debut")
-	private Date debut;
-	
-	@Column(name = "fin")
-	private Date fin;
-	
-	@ForeignKey(field = "id",table = "salle")
-	@Column(name = "salle")
-	private Salle salle;
+    @PrimaryKey
+    @Column(name = "id")
+    private Long id;
 
-	protected Reunion(Long id, Date debut, Date fin, Salle salle) {
-		super();
-		this.id = id;
-		this.debut = debut;
-		this.fin = fin;
-		this.salle = salle;
-	}
+    @Column(name = "debut")
+    private Date debut;
 
-	protected Reunion() {
-		super();
-	}
+    @Column(name = "fin")
+    private Date fin;
 
-	public Long getId() {
-		return id;
-	}
+    @ForeignKey(field = "id", table = "salle")
+    @Column(name = "salle")
+    private Salle salle;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Reunion(Long id, Date debut, Date fin, Salle salle) {
+        super();
+        this.id = id;
+        this.debut = debut;
+        this.fin = fin;
+        this.salle = salle;
+    }
 
-	public Date getDebut() {
-		return debut;
-	}
+    public Reunion() {
+        super();
+    }
 
-	public void setDebut(Date debut) {
-		this.debut = debut;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Date getFin() {
-		return fin;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setFin(Date fin) {
-		this.fin = fin;
-	}
+    public Date getDebut() {
+        return debut;
+    }
 
-	public Salle getSalle() {
-		return salle;
-	}
+    public void setDebut(Date debut) {
+        this.debut = debut;
+    }
 
-	public void setSalle(Salle salle) {
-		this.salle = salle;
-	}
-	
-	
+    public Date getFin() {
+        return fin;
+    }
+
+    public void setFin(Date fin) {
+        this.fin = fin;
+    }
+
+    public Salle getSalle() {
+        return salle;
+    }
+
+    public void setSalle(Salle salle) {
+        this.salle = salle;
+    }
+
 }

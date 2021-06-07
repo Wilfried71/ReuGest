@@ -7,71 +7,68 @@ import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
 /**
- * 
+ *
  * @author tpeyr
  *
  */
 @Table(name = "reunion")
 public class ReunionLight {
 
-	@PrimaryKey
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "debut")
-	private Date debut;
-	
-	@Column(name = "fin")
-	private Date fin;
-	
-	@Column(name = "salle")
-	private Long idSalle;
+    @PrimaryKey
+    @Column(name = "id")
+    private Long id;
 
-	
-	protected ReunionLight(Long id, Date debut, Date fin, Long salle) {
-		super();
-		this.id = id;
-		this.debut = debut;
-		this.fin = fin;
-		this.idSalle = salle;
-	}
+    @Column(name = "debut")
+    private Date debut;
 
-	protected ReunionLight() {
-		super();
-	}
+    @Column(name = "fin")
+    private Date fin;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "salle")
+    private Long idSalle;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public ReunionLight(Long id, Date debut, Date fin, Long salle) {
+        super();
+        this.id = id;
+        this.debut = debut;
+        this.fin = fin;
+        this.idSalle = salle;
+    }
 
-	public Date getDebut() {
-		return debut;
-	}
+    public ReunionLight() {
+        super();
+    }
 
-	public void setDebut(Date debut) {
-		this.debut = debut;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Date getFin() {
-		return fin;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setFin(Date fin) {
-		this.fin = fin;
-	}
+    public Date getDebut() {
+        return debut;
+    }
 
-	public Long getSalle() {
-		return idSalle;
-	}
+    public void setDebut(Date debut) {
+        this.debut = debut;
+    }
 
-	public void setSalle(Long salle) {
-		this.idSalle = salle;
-	}
-	
-	
-	
+    public Date getFin() {
+        return fin;
+    }
+
+    public void setFin(Date fin) {
+        this.fin = fin;
+    }
+
+    public Long getSalle() {
+        return idSalle;
+    }
+
+    public void setSalle(Long salle) {
+        this.idSalle = salle;
+    }
+
 }

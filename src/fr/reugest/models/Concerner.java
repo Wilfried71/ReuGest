@@ -6,48 +6,47 @@ import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
 /**
- * 
+ *
  * @author tpeyr
  *
  */
 @Table(name = "concerner")
 public class Concerner {
 
-	@PrimaryKey
-	@Column(name = "utilisateur")
-	@ForeignKey(field = "id", table = "utilisateur")
-	private Utilisateur utilisateur;
-	
-	@PrimaryKey
-	@Column(name = "reunion")
-	@ForeignKey(field = "id", table = "reunion")
-	private Reunion reunion;
+    @PrimaryKey
+    @Column(name = "utilisateur")
+    @ForeignKey(field = "id", table = "utilisateur")
+    private Utilisateur utilisateur;
 
-	protected Concerner(Utilisateur utilisateur, Reunion reunion) {
-		super();
-		this.utilisateur = utilisateur;
-		this.reunion = reunion;
-	}
+    @PrimaryKey
+    @Column(name = "reunion")
+    @ForeignKey(field = "id", table = "reunion")
+    private Reunion reunion;
 
-	protected Concerner() {
-		super();
-	}
+    public Concerner(Utilisateur utilisateur, Reunion reunion) {
+        super();
+        this.utilisateur = utilisateur;
+        this.reunion = reunion;
+    }
 
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
-	}
+    public Concerner() {
+        super();
+    }
 
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
-	}
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
 
-	public Reunion getReunion() {
-		return reunion;
-	}
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
 
-	public void setReunion(Reunion reunion) {
-		this.reunion = reunion;
-	}
-	
-	
+    public Reunion getReunion() {
+        return reunion;
+    }
+
+    public void setReunion(Reunion reunion) {
+        this.reunion = reunion;
+    }
+
 }

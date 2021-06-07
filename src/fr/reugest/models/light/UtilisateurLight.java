@@ -7,111 +7,111 @@ import fr.thomas.orm.annotations.Table;
 @Table(name = "utilisateur")
 public class UtilisateurLight {
 
-	@PrimaryKey
-	@Column(name = "id")
-	private Long id;
-	
-	@Column(name = "nom")
-	private String nom;
-	
-	@Column(name = "prenom")
-	private String prenom;
-	
-	@Column(name = "email")
-	private String email;
-	
-	@Column(name = "password")
-	private String password;
-	
-	@Column(name = "droit")
-	private Long idDroit;
-	
-	@Column(name = "service")
-	private Long idService;
-	
-	@Column(name = "fonction")
-	private Long idFonction;
+    @PrimaryKey
+    @Column(name = "id")
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "nom")
+    private String nom;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Column(name = "prenom")
+    private String prenom;
 
-	public String getNom() {
-		return nom;
-	}
+    @Column(name = "email")
+    private String email;
 
-	public void setNom(String nom) {
-		this.nom = nom;
-	}
+    @Column(name = "password")
+    private String password;
 
-	public String getPrenom() {
-		return prenom;
-	}
+    @Column(name = "droit")
+    private Long idDroit;
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
-	}
+    @Column(name = "service")
+    private Long idService;
 
-	public String getEmail() {
-		return email;
-	}
+    @Column(name = "fonction")
+    private Long idFonction;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getNom() {
+        return nom;
+    }
 
-	public Long getIdDroit() {
-		return idDroit;
-	}
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 
-	public void setIdDroit(Long idDroit) {
-		this.idDroit = idDroit;
-	}
+    public String getPrenom() {
+        return prenom;
+    }
 
-	public Long getIdService() {
-		return idService;
-	}
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
 
-	public void setIdService(Long idService) {
-		this.idService = idService;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public Long getIdFonction() {
-		return idFonction;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setIdFonction(Long idFonction) {
-		this.idFonction = idFonction;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public UtilisateurLight() {
-		super();
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	protected UtilisateurLight(Long id, String nom, String prenom, String email, String password, Long idDroit,
-			Long idService, Long idFonction) {
-		super();
-		this.id = id;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.email = email;
-		this.password = password;
-		this.idDroit = idDroit;
-		this.idService = idService;
-		this.idFonction = idFonction;
-	}
+    public Long getIdDroit() {
+        return idDroit;
+    }
+
+    public void setIdDroit(Long idDroit) {
+        this.idDroit = idDroit;
+    }
+
+    public Long getIdService() {
+        return idService;
+    }
+
+    public void setIdService(Long idService) {
+        this.idService = idService;
+    }
+
+    public Long getIdFonction() {
+        return idFonction;
+    }
+
+    public void setIdFonction(Long idFonction) {
+        this.idFonction = idFonction;
+    }
+
+    public UtilisateurLight() {
+        super();
+    }
+
+    protected UtilisateurLight(Long id, String nom, String prenom, String email, String password, Long idDroit,
+            Long idService, Long idFonction) {
+        super();
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.password = password;
+        this.idDroit = idDroit;
+        this.idService = idService;
+        this.idFonction = idFonction;
+    }
 
     public void setLibelle(String libelle) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -120,7 +120,5 @@ public class UtilisateurLight {
     public void setPlaces(String places) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-	
-	
-	
+
 }
