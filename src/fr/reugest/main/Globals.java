@@ -1,5 +1,6 @@
 package fr.reugest.main;
 
+import fr.reugest.frames.EquipementFrame;
 import fr.reugest.frames.MenuFrame;
 import fr.reugest.frames.RoomsFrame;
 import fr.reugest.frames.UsersFrame;
@@ -19,6 +20,8 @@ public class Globals {
         public static UsersFrame usersFrame;
         
         public static RoomsFrame roomsFrame;
+        
+        public static EquipementFrame equipementFrame;
 	
 	public static String version;
 	
@@ -30,5 +33,17 @@ public class Globals {
             usersFrame.dispose();
             usersFrame = new UsersFrame();
             usersFrame.setVisible(true);
+        }
+        
+        public static void Rooms() {
+            roomsFrame.dispose();
+            roomsFrame = new RoomsFrame();
+            roomsFrame.setVisible(true);
+        }
+        
+        public static void reloadEquipementFrame() {
+            equipementFrame.dispose();
+            equipementFrame = new EquipementFrame();
+            equipementFrame.setVisible(true);
         }
 }
