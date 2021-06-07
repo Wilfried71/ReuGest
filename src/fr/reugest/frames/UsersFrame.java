@@ -1,5 +1,6 @@
 package fr.reugest.frames;
 
+import fr.reugest.listeners.ValidateButtonListener;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
@@ -21,6 +22,7 @@ import fr.reugest.models.Fonction;
 import fr.reugest.models.Service;
 import fr.reugest.models.Utilisateur;
 import fr.thomas.orm.Model;
+import java.awt.event.ActionEvent;
 
 public class UsersFrame extends BaseFrame {
 
@@ -170,6 +172,8 @@ public class UsersFrame extends BaseFrame {
 		this.pRight.add(this.cancelButton);
 		this.pRight.add(this.validateButton);
 		this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
+                
+                validateButton.addActionListener(new ValidateButtonListener<Utilisateur>(Utilisateur.class));
 	}
 
 	/**
