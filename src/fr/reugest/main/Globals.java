@@ -22,4 +22,10 @@ public class Globals {
 	public static String adminUsername;
 	
 	public static String adminPassword;
+        
+        public static void reloadUsersFrame() {
+            usersFrame.dispose();
+            usersFrame = new UsersFrame();
+            usersFrame.setVisible(true);
+        }
 }

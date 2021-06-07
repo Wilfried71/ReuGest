@@ -46,7 +46,7 @@ public class UsersFrame extends BaseFrame {
     private List<Service> listServices;
     private List<Droit> listDroits;
     private List<Utilisateur> listUtilisateurs;
-    
+
     /**
      * Selected user
      */
@@ -117,19 +117,23 @@ public class UsersFrame extends BaseFrame {
 
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                validateButton.setEnabled(true);
-                
-                selectedUser = listUtilisateurs.get(table.getSelectedRow());
-                // Fill form fields
-                txtEmail.setText(selectedUser.getEmail());
-                txtNom.setText(selectedUser.getNom());
-                txtPrenom.setText(selectedUser.getPrenom());
-                cboFonction
-                        .setSelectedIndex(listFonctions.indexOf(getFonctionFromId(selectedUser.getFonction().getId())));
-                cboDroit.setSelectedIndex(listDroits.indexOf(getDroitFromId(selectedUser.getDroit().getId())));
-                cboService.setSelectedIndex(listServices.indexOf(getServiceFromId(selectedUser.getService().getId())));
-                // Change state to EDITING
-                state = State.EDITING;
+                // If not reloading
+                if (table.getSelectedRow() != -1) {
+                    validateButton.setEnabled(true);
+
+                    selectedUser = listUtilisateurs.get(table.getSelectedRow());
+                    // Fill form fields
+                    txtEmail.setText(selectedUser.getEmail());
+                    txtNom.setText(selectedUser.getNom());
+                    txtPrenom.setText(selectedUser.getPrenom());
+                    cboFonction
+                            .setSelectedIndex(listFonctions.indexOf(getFonctionFromId(selectedUser.getFonction().getId())));
+                    cboDroit.setSelectedIndex(listDroits.indexOf(getDroitFromId(selectedUser.getDroit().getId())));
+                    cboService.setSelectedIndex(listServices.indexOf(getServiceFromId(selectedUser.getService().getId())));
+                    // Change state to EDITING
+                    state = State.EDITING;
+                }
+
             }
         });
 
@@ -189,26 +193,21 @@ public class UsersFrame extends BaseFrame {
         this.validateButton.setEnabled(false);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
         // Validate button action listener
-        
+
         // Add button event listener
         validateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Get properties
                 String nom = txtNom.getText();
-                //System.out.println(Nom);
                 String prenom = txtPrenom.getText();
-                //System.out.println(Prenom);
                 String email = txtEmail.getText();
-                //System.out.println(Email);
-                Fonction fonction = (Fonction)cboFonction.getSelectedItem();
-                //System.out.println(Fonction);
-                Service service = (Service)cboService.getSelectedItem();
-                //System.out.println(Service);
-                Droit droit = (Droit)cboDroit.getSelectedItem();
-                //System.out.println(Droit);
-                //utilisateurModel.update(selectedUser)
-                System.out.println(selectedUser);
+                Fonction fonction = (Fonction) cboFonction.getSelectedItem();
+                Service service = (Service) cboService.getSelectedItem();
+                Droit droit = (Droit) cboDroit.getSelectedItem();
+                // Instanciate user light
                 UtilisateurLight updatedUser = new UtilisateurLight();
+                // Set properties
                 updatedUser.setNom(nom);
                 updatedUser.setPrenom(prenom);
                 updatedUser.setEmail(email);
@@ -217,18 +216,23 @@ public class UsersFrame extends BaseFrame {
                 updatedUser.setIdDroit(droit.getId());
                 updatedUser.setId(selectedUser.getId());
                 updatedUser.setPassword(selectedUser.getPassword());
+                // Instanciate Model
                 Model model = new Model<UtilisateurLight>(UtilisateurLight.class);
                 try {
+                    // Update user
                     model.update(updatedUser);
+                    // Reload data in JTable
+                    listUtilisateurs = utilisateurModel.findAll();
+                    
                     JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
+
+                    // Reload frame to replace data
+                    Globals.reloadUsersFrame();
+                    
                 } catch (Exception ex) {
                     Logger.getLogger(UsersFrame.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
                 }
-                
-                
-								
-                        
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -237,14 +241,14 @@ public class UsersFrame extends BaseFrame {
                 setEnabled(false);
                 UserCreateModal createModal = new UserCreateModal();
                 createModal.setVisible(true);
-            }            
+            }
         });
     }
 
     /**
      * Load users in table
      */
-    public void loadUsersInJTable() {
+    public void loadUsersInJTable() {                    
 
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -254,8 +258,7 @@ public class UsersFrame extends BaseFrame {
         };
 
         for (Utilisateur u : this.listUtilisateurs) {
-            tableModel
-                    .addRow(new Object[]{u.getNom(), u.getPrenom(), u.getEmail(), u.getFonction(), u.getService()});
+            tableModel.addRow(new Object[]{u.getNom(), u.getPrenom(), u.getEmail(), u.getFonction(), u.getService()});
         }
         this.table = new JTable(tableModel);
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
