@@ -180,6 +180,17 @@ public class MenuFrame extends JFrame {
                 });
             }
         });
+        
+        
+        /**
+         * Add onClick listener to "Settings" item
+         */
+        itemParametres.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "La fonctionnalité n'a pas été développée.", "Information", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
     }
 
 }

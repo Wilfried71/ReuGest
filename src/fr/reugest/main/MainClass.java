@@ -1,5 +1,7 @@
 package fr.reugest.main;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -25,13 +27,7 @@ public class MainClass {
      * @param args
      */
     public static void main(String[] args) {
-
-        try {
-            UIManager.setLookAndFeel(new FlatLightLaf());
-        } catch (Exception ex) {
-            System.err.println("Failed to initialize LaF");
-        }
-
+        
         /**
          * Load data from application.properties
          */
@@ -42,6 +38,18 @@ public class MainClass {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            if(props.getProperty("dark.mode") == null || !props.getProperty("dark.mode").equals("true")) {
+                UIManager.setLookAndFeel(new FlatLightLaf());
+            } else {
+                UIManager.setLookAndFeel(new FlatDarkLaf());
+            }            
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
+        }
+
+        
         Globals.adminUsername = props.getProperty("admin.username");
         Globals.adminPassword = props.getProperty("admin.password");
 
