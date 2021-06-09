@@ -51,6 +51,7 @@ public class PlanningFrame extends BaseFrame {
     private TimePicker timePickerDebut, timePickerFin;
     private JScheduler planning;
     private JPanel schedulerHeaderPanel;
+    private JButton btnPrev, btnNext;
 
     /**
      * Selected user
@@ -96,9 +97,11 @@ public class PlanningFrame extends BaseFrame {
         pLeft.setLayout(new BorderLayout());
         // Add items
         schedulerHeaderPanel = new JPanel(new FlowLayout());
-        schedulerHeaderPanel.add(new JButton("<<"));
-        schedulerHeaderPanel.add(new JComboBox());
-        schedulerHeaderPanel.add(new JButton(">>"));
+        this.btnPrev = new JButton("<<");
+        schedulerHeaderPanel.add(this.btnPrev);
+        schedulerHeaderPanel.add(new JComboBox(this.listSalle.toArray()));
+        this.btnNext = new JButton(">>");
+        schedulerHeaderPanel.add(this.btnNext);
         pLeft.add(schedulerHeaderPanel, BorderLayout.NORTH);        
         
         
@@ -107,6 +110,20 @@ public class PlanningFrame extends BaseFrame {
         pLeft.add(this.planning, BorderLayout.CENTER);
         // Set a border for better rendering
         this.pLeft.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        // EventHandler on buttons
+        btnPrev.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                planning.previousWeek();
+            }
+        });
+        btnNext.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                planning.nextWeek();
+            }
+        });
     }
 
     /**

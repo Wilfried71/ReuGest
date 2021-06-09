@@ -57,4 +57,8 @@ public class Salle {
         this.places = places;
     }
 
+    @Override
+    public String toString() {
+        return this.libelle; //To change body of generated methods, choose Tools | Templates.
+    }
 }
