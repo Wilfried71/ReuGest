@@ -141,6 +141,7 @@ public class UserCreateModal extends JFrame {
                 newUser.setIdDroit(((Droit) cboDroit.getSelectedItem()).getId());
                 newUser.setIdFonction(((Fonction) cboFonction.getSelectedItem()).getId());
                 newUser.setIdService(((Service) cboService.getSelectedItem()).getId());
+                newUser.setIsDeleted(false);
                 try {
                     utilisateurModel.create(newUser);
                     

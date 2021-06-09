@@ -2,6 +2,7 @@ package fr.reugest.frames;
 
 import com.github.lgooddatepicker.components.CalendarPanel;
 import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.TimePicker;
 import fr.reugest.main.Globals;
 import java.awt.GridLayout;
 import java.util.List;
@@ -13,20 +14,43 @@ import fr.reugest.models.Salle;
 import fr.reugest.models.Utilisateur;
 import fr.thomas.orm.Model;
 import fr.thomas.swing.JScheduler;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.util.Arrays;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 public class PlanningFrame extends BaseFrame {
 
     private static final long serialVersionUID = -5481781563859385889L;
 
-    private JScheduler planning;
-    
+    /**
+     * Models
+     */
     private Model<Salle> salleModel;
 
+    /**
+     * Lists
+     */
     private List<Salle> listSalle;
+    
+    /**
+     * Graphic components
+     */
+    private DatePicker datePicker;
+    private TimePicker timePickerDebut, timePickerFin;
+    private JScheduler planning;
+    private JPanel schedulerHeaderPanel;
 
     /**
      * Selected user
@@ -37,7 +61,8 @@ public class PlanningFrame extends BaseFrame {
         super();
         // Store in global variables
         Globals.planningFrame = this;
-        this.setTitle("Gestion des utilisateurs");
+        setMinimumSize(new Dimension(1120,640));
+        this.setTitle("Gestion des réservations");
         this.setLocationRelativeTo(null);
 
         /**
@@ -67,8 +92,19 @@ public class PlanningFrame extends BaseFrame {
      * Load left panel components (JTable)
      */
     private void loadLeftPanel() {
+        // Create layouts
+        pLeft.setLayout(new BorderLayout());
+        // Add items
+        schedulerHeaderPanel = new JPanel(new FlowLayout());
+        schedulerHeaderPanel.add(new JButton("<<"));
+        schedulerHeaderPanel.add(new JComboBox());
+        schedulerHeaderPanel.add(new JButton(">>"));
+        pLeft.add(schedulerHeaderPanel, BorderLayout.NORTH);        
+        
+        
+        // Planning
         this.planning = new JScheduler(Arrays.asList(), Color.RED);
-        pLeft.add(this.planning);
+        pLeft.add(this.planning, BorderLayout.CENTER);
         // Set a border for better rendering
         this.pLeft.setBorder(new EmptyBorder(10, 10, 10, 10));
     }
@@ -79,10 +115,32 @@ public class PlanningFrame extends BaseFrame {
     private void loadRightPanel() {
         // Set right panel
         this.pRight.setLayout(new GridLayout(10, 2, 25, 10));
-        this.pRight.add(new DatePicker());
+        
+        // Datepicker
+        this.datePicker = new DatePicker();
+        this.pRight.add(new JLabel("Date : "));
+        this.pRight.add(datePicker);
+        
+        // Time pickers
+        this.timePickerDebut = new TimePicker();
+        this.pRight.add(new JLabel("Heure de début : "));
+        this.pRight.add(timePickerDebut);
+        
+        this.timePickerFin = new TimePicker();
+        this.pRight.add(new JLabel("Heure de fin : "));
+        this.pRight.add(timePickerFin);
+        
+        
         /**
          * Create empty JLabel to fill
          */
+        
+        this.pRight.add(new JLabel("Salle : "));
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
+        this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
@@ -95,6 +153,9 @@ public class PlanningFrame extends BaseFrame {
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
         // Validate button action listener
 
+        //Add button rights access
+        this.addRightsToAddButton();
+        
         // Add button event listener
         validateButton.addActionListener(new ActionListener() {
             @Override
@@ -105,33 +166,23 @@ public class PlanningFrame extends BaseFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*setEnabled(false);
-                UserCreateModal createModal = new UserCreateModal();
-                createModal.setVisible(true);*/
+                
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               /* int input = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'enregistrement ?\n\nCette action est irréversible.", "Select an Option...",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                // If YES
-                if (input == 0) {
-                    try {
-                        Model<UtilisateurLight> model = new Model<>(UtilisateurLight.class);
-                        UtilisateurLight light = new UtilisateurLight(selectedUser.getId(),
-                                selectedUser.getNom(), selectedUser.getPrenom(), selectedUser.getEmail(),
-                                selectedUser.getPassword(), selectedUser.getDroit().getId(),
-                                selectedUser.getService().getId(), selectedUser.getFonction().getId(), true);
-                        // Update in DB
-                        model.update(light);
-                        JOptionPane.showMessageDialog(null, "Utilisateur correctement supprimé.");
-                        Globals.reloadUsersFrame();
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
-                    }
-                }*/
+               
             }
         });
+    }
+    
+    
+    public void addRightsToAddButton() {
+        // Simple user
+        if(Globals.user.getDroit().getId().equals(1L)) {
+            addButton.setVisible(false);
+            deleteButton.setVisible(false);
+        }
     }
 }

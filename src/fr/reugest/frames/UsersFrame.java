@@ -218,13 +218,14 @@ public class UsersFrame extends BaseFrame {
                 updatedUser.setIdDroit(droit.getId());
                 updatedUser.setId(selectedUser.getId());
                 updatedUser.setPassword(selectedUser.getPassword());
+                updatedUser.setIsDeleted(false);
                 // Instanciate Model
                 Model model = new Model<UtilisateurLight>(UtilisateurLight.class);
                 try {
                     // Update user
                     model.update(updatedUser);
 
-                    JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
+                    JOptionPane.showMessageDialog(null, "Utilisateur modifié avec succès");
 
                     // Reload frame to replace data
                     Globals.reloadUsersFrame();
