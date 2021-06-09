@@ -103,7 +103,7 @@ public class Model<T> implements DAO<T> {
         // Get columns of the class
         List<Field> columns = getColumns();
 
-        // On cr�e la requete au format String
+        // On cree la requete au format String
         String request = "UPDATE " + getTable() + " SET ";
 
         // Pour chaque champ, on ajoute un ? dans la requete preparee
@@ -457,10 +457,9 @@ public class Model<T> implements DAO<T> {
         // On cree la requete preparee
         PreparedStatement stmt = connection.prepareStatement(query);
 
-        // On ajoute chaque champ a la requete preparee
-        for (Object item : fields) {
-
-            stmt.setObject(fields.indexOf(item) + 1, item);
+        // On ajoute chaque champ à la requête préparée
+        for (int i = 0; i < fields.size(); i++) {
+            stmt.setObject(i + 1, fields.get(i));
         }
 
         // Execution de la requete

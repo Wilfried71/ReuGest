@@ -1,7 +1,7 @@
 package fr.reugest.main;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 
 import fr.reugest.frames.ConnexionFrame;
 import fr.thomas.orm.ORMConfig;
-import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.UIManager;
 
 /**
@@ -41,9 +40,9 @@ public class MainClass {
 
         try {
             if(props.getProperty("dark.mode") == null || !props.getProperty("dark.mode").equals("true")) {
-                UIManager.setLookAndFeel(new FlatLightLaf());
+                //UIManager.setLookAndFeel(new FlatIntelliJLaf());
             } else {
-                UIManager.setLookAndFeel(new FlatDarkLaf());
+                //UIManager.setLookAndFeel(new FlatDarculaLaf());
             }            
         } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");

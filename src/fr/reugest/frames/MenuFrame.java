@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import fr.reugest.main.Globals;
+import fr.reugest.models.Droit;
+import fr.reugest.models.Utilisateur;
 
 public class MenuFrame extends JFrame {
 
@@ -26,36 +28,14 @@ public class MenuFrame extends JFrame {
     private JMenu gestionMenu, planningMenu, aideMenu;
     private JMenuItem itemUtilisateurs, itemSalles, itemEquipements, itemReserver, itemImprimer, itemParametres,
             itemAbout;
+    private JMenuBar mb;
 
     public MenuFrame() {
         super("ReuGest - Menu principal");
 
         // Instanciate menuBar and items
-        JMenuBar mb = new JMenuBar();
-        gestionMenu = new JMenu("Gestion");
-        planningMenu = new JMenu("Planning");
-        aideMenu = new JMenu("Aide");
+        this.createMenu();
         panneau = new JPanel(new GridBagLayout());
-        // labelImg = new JLabel("Texte : ");
-        itemUtilisateurs = new JMenuItem("Utilisateurs");
-        itemSalles = new JMenuItem("Salles");
-        itemEquipements = new JMenuItem("Equipements");
-        itemReserver = new JMenuItem("Réserver");
-        itemImprimer = new JMenuItem("Imprimer");
-        itemParametres = new JMenuItem("Paramètres");
-        itemAbout = new JMenuItem("A propos");
-        // img = new ImageIcon("logoReugest.jpg");
-        gestionMenu.add(itemUtilisateurs);
-        gestionMenu.add(itemSalles);
-        gestionMenu.add(itemEquipements);
-        planningMenu.add(itemReserver);
-        planningMenu.add(itemImprimer);
-        aideMenu.add(itemParametres);
-        aideMenu.add(itemAbout);
-        mb.add(gestionMenu);
-        mb.add(planningMenu);
-        mb.add(aideMenu);
-        setJMenuBar(mb);
         setMinimumSize(new Dimension(720, 480));
         setContentPane(panneau);
         // Create image logo
@@ -90,76 +70,18 @@ public class MenuFrame extends JFrame {
         itemAbout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "R�uGest : Logiciel de gestion de\nplanning\n\nLogiciel �dit� et d�velopp� par\nJean Sauron et Thomas Peyrot.\n\n� Copyright 2021.\nTous droits r�serv�s.");
+                JOptionPane.showMessageDialog(null, "RéuGest : Logiciel de gestion de\nplanning\n\nLogiciel édité et développé par\nJean Sauron et Thomas Peyrot.\n\n© Copyright 2021.\nTous droits réservés.");
             }
         });
 
         /**
-         * Add onClick listener to "Utilisateurs" item
+         * Add onClick listener to "Planning" item
          */
-        itemUtilisateurs.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Create new user frame
-                UsersFrame usersFrame = new UsersFrame();
-
-                // Disable the main menu frame
-                Globals.mainMenu.setEnabled(false);
-
-                /**
-                 * When the users Frame is closed, activate menu form
-                 */
-                usersFrame.setVisible(true);
-
-                // When frame is closed
-                usersFrame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        super.windowClosed(e);
-                        //Enable main menu frame
-                        Globals.mainMenu.setEnabled(true);
-                    }
-                });
-            }
-        });
-        
-        /**
-         * Add onClick listener to "Salles" item
-         */
-        itemSalles.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Create new salle frame
-                RoomsFrame roomsFrame = new RoomsFrame();
-
-                // Disable the main menu frame
-                Globals.mainMenu.setEnabled(false);
-
-                /**
-                 * When the users Frame is closed, activate menu form
-                 */
-                roomsFrame.setVisible(true);
-
-                // When frame is closed
-                roomsFrame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        super.windowClosed(e);
-                        //Enable main menu frame
-                        Globals.mainMenu.setEnabled(true);
-                    }
-                });
-            }
-        });
-        
-        /**
-         * Add onClick listener to "Equipements" item
-         */
-        itemEquipements.addActionListener(new ActionListener() {
+        itemReserver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Create new equipements frame
-                EquipementFrame equipementFrame = new EquipementFrame();
+                PlanningFrame planningFrame = new PlanningFrame();
 
                 // Disable the main menu frame
                 Globals.mainMenu.setEnabled(false);
@@ -167,10 +89,10 @@ public class MenuFrame extends JFrame {
                 /**
                  * When the users Frame is closed, activate menu form
                  */
-                equipementFrame.setVisible(true);
+                planningFrame.setVisible(true);
 
                 // When frame is closed
-                equipementFrame.addWindowListener(new WindowAdapter() {
+                planningFrame.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         super.windowClosed(e);
@@ -180,8 +102,7 @@ public class MenuFrame extends JFrame {
                 });
             }
         });
-        
-        
+
         /**
          * Add onClick listener to "Settings" item
          */
@@ -193,4 +114,140 @@ public class MenuFrame extends JFrame {
         });
     }
 
+    /**
+     * Create menuBar
+     */
+    public void createMenu() {
+        // Create menubar
+        this.mb = new JMenuBar();
+
+        Droit d = Globals.user.getDroit();
+
+        /**
+         * Gestion menu
+         */
+        // If Admin
+        if (d.getId().equals(3L)) {
+            gestionMenu = new JMenu("Gestion");
+            itemUtilisateurs = new JMenuItem("Utilisateurs");
+            itemSalles = new JMenuItem("Salles");
+            itemEquipements = new JMenuItem("Equipements");
+            gestionMenu.add(itemUtilisateurs);
+            gestionMenu.add(itemSalles);
+            gestionMenu.add(itemEquipements);
+            mb.add(gestionMenu);
+
+            /**
+             * Add onClick listener to "Utilisateurs" item
+             */
+            itemUtilisateurs.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Create new user frame
+                    UsersFrame usersFrame = new UsersFrame();
+
+                    // Disable the main menu frame
+                    Globals.mainMenu.setEnabled(false);
+
+                    /**
+                     * When the users Frame is closed, activate menu form
+                     */
+                    usersFrame.setVisible(true);
+
+                    // When frame is closed
+                    usersFrame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            super.windowClosed(e);
+                            //Enable main menu frame
+                            Globals.mainMenu.setEnabled(true);
+                        }
+                    });
+                }
+            });
+
+            /**
+             * Add onClick listener to "Salles" item
+             */
+            itemSalles.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Create new salle frame
+                    RoomsFrame roomsFrame = new RoomsFrame();
+
+                    // Disable the main menu frame
+                    Globals.mainMenu.setEnabled(false);
+
+                    /**
+                     * When the users Frame is closed, activate menu form
+                     */
+                    roomsFrame.setVisible(true);
+
+                    // When frame is closed
+                    roomsFrame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            super.windowClosed(e);
+                            //Enable main menu frame
+                            Globals.mainMenu.setEnabled(true);
+                        }
+                    });
+                }
+            });
+
+            /**
+             * Add onClick listener to "Equipements" item
+             */
+            itemEquipements.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Create new equipements frame
+                    EquipementFrame equipementFrame = new EquipementFrame();
+
+                    // Disable the main menu frame
+                    Globals.mainMenu.setEnabled(false);
+
+                    /**
+                     * When the users Frame is closed, activate menu form
+                     */
+                    equipementFrame.setVisible(true);
+
+                    // When frame is closed
+                    equipementFrame.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            super.windowClosed(e);
+                            //Enable main menu frame
+                            Globals.mainMenu.setEnabled(true);
+                        }
+                    });
+                }
+            });
+        }
+
+        /**
+         * Planning menu
+         */
+        planningMenu = new JMenu("Planning");
+        itemReserver = new JMenuItem("Réserver");
+        itemImprimer = new JMenuItem("Imprimer");
+        planningMenu.add(itemReserver);
+        planningMenu.add(itemImprimer);
+        mb.add(planningMenu);
+
+        /**
+         * Help menu
+         */
+        aideMenu = new JMenu("Aide");
+        itemParametres = new JMenuItem("Paramètres");
+        itemAbout = new JMenuItem("A propos");
+        aideMenu.add(itemParametres);
+        aideMenu.add(itemAbout);
+        mb.add(aideMenu);
+
+        /**
+         * Set menubar
+         */
+        setJMenuBar(mb);
+    }
 }

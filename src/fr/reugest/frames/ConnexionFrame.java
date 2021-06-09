@@ -112,10 +112,14 @@ public class ConnexionFrame extends JFrame {
                         if (user.isEmpty()) {
                             messageError.setVisible(true);
                         } else {
+                            // Save current user
+                            Globals.user = user.get(0);
+                            // Create menu
                             MenuFrame menuFrame = new MenuFrame();
                             menuFrame.setVisible(true);
                             // Store the main menu as global variable
                             Globals.mainMenu = menuFrame;
+                            
                             // Delete current frame
                             dispose();
                         }
