@@ -28,13 +28,20 @@ public class Reunion {
     @ForeignKey(field = "id", table = "salle")
     @Column(name = "salle")
     private Salle salle;
+    
+    @Column(name = "isValid")
+    private Boolean isValid;
+    
+    @Column(name = "motif")
+    private String motif;
 
-    public Reunion(Long id, Date debut, Date fin, Salle salle) {
-        super();
+    public Reunion(Long id, Date debut, Date fin, Salle salle, Boolean isValid, String motif) {
         this.id = id;
         this.debut = debut;
         this.fin = fin;
         this.salle = salle;
+        this.isValid = isValid;
+        this.motif = motif;
     }
 
     public Reunion() {
@@ -73,4 +80,21 @@ public class Reunion {
         this.salle = salle;
     }
 
+    public Boolean getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    public String getMotif() {
+        return motif;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
+    
 }

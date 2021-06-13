@@ -26,15 +26,24 @@ public class ReunionLight {
 
     @Column(name = "salle")
     private Long idSalle;
+    
+    @Column(name = "isValid")
+    private Boolean isValid;
+    
+    @Column(name = "motif")
+    private String motif;
 
-    public ReunionLight(Long id, Date debut, Date fin, Long salle) {
-        super();
+    public ReunionLight(Long id, Date debut, Date fin, Long idSalle, Boolean isValid, String motif) {
         this.id = id;
         this.debut = debut;
         this.fin = fin;
-        this.idSalle = salle;
+        this.idSalle = idSalle;
+        this.isValid = isValid;
+        this.motif = motif;
     }
 
+    
+    
     public ReunionLight() {
         super();
     }
@@ -63,12 +72,28 @@ public class ReunionLight {
         this.fin = fin;
     }
 
-    public Long getSalle() {
+    public Long getIdSalle() {
         return idSalle;
     }
 
-    public void setSalle(Long salle) {
-        this.idSalle = salle;
+    public void setIdSalle(Long idSalle) {
+        this.idSalle = idSalle;
+    }
+
+    public Boolean getIsValid() {
+        return isValid;
+    }
+
+    public void setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    public String getMotif() {
+        return motif;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
     }
 
 }
