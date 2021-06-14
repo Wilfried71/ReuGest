@@ -21,9 +21,16 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -211,7 +218,7 @@ public class PlanningFrame extends BaseFrame {
     private void loadEvents() {
         Calendar lundi = planning.getStartOfWeek();
         Calendar dimanche = planning.getEndOfWeek();
-        //System.out.println("De " + lundi.getTime() + " à " + dimanche.getTime());
+        System.out.println("De " + lundi.getTime() + " à " + dimanche.getTime());
         try {
             this.listReunion = this.reunionModel.query("SELECT * FROM Reunion WHERE fin > ? AND debut < ?", Arrays.asList(lundi.getTime(), dimanche.getTime()));
         } catch (Exception ex) {
@@ -220,30 +227,50 @@ public class PlanningFrame extends BaseFrame {
         }
         // Reload events in planning
         planning.setEvents(getJEventsFromReunion(listReunion));
-        planning.refresh();
+        System.out.println(listReunion.size());
     }
-    
-    
-    
-    
-    
 
     /**
      * Convert a Reunion list to JEvent list to be displayed on planning
+     *
      * @param list
-     * @return 
+     * @return
      */
     private List<JEvent> getJEventsFromReunion(List<Reunion> list) {
         List<JEvent> events = new ArrayList<>();
 
         for (Reunion r : list) {
             try {
-                events.add(new JEvent(Color.CYAN, r.getDebut(), r.getFin(), r.getMotif(), ""));
+                // Instanciate event
+                JEvent evt = new JEvent(Color.CYAN, r.getDebut(), r.getFin(), r.getMotif(), "");
+
+                // Add click listener
+                evt.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        JEvent source = (JEvent) e.getSource();
+                        datePicker.setDate(toLocalDate(source.getStart()));
+                        timePickerDebut.setTime(toLocalTime(source.getStart()));
+                        timePickerFin.setTime(toLocalTime(source.getEnd()));
+                    }
+                });
+                events.add(evt);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
             }
         }
 
         return events;
+    }
+
+    public LocalDate toLocalDate(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    }
+
+    public LocalTime toLocalTime(Date d) {
+        return LocalDateTime.ofInstant(d.toInstant(),
+                ZoneId.systemDefault()).toLocalTime();
     }
 }
