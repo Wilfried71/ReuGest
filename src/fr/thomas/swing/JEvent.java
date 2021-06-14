@@ -20,6 +20,11 @@ public class JEvent extends JComponent {
     private String header;
 
     /**
+     * Custom object that is stored in JEvent
+     */
+    private Object event;
+
+    /**
      *
      */
     private static final long serialVersionUID = 7403753831978103955L;
@@ -53,7 +58,7 @@ public class JEvent extends JComponent {
         this.backgroundColor = backgroundColor;
     }
 
-    public JEvent(Color backgroundColor, Date start, Date end, String header, String content) throws Exception {
+    public JEvent(Color backgroundColor, Date start, Date end, String header, Object event) throws Exception {
         super();
         this.backgroundColor = backgroundColor;
         Calendar cStart = Calendar.getInstance();
@@ -70,6 +75,7 @@ public class JEvent extends JComponent {
         this.start = start;
         this.end = end;
         this.header = header;
+        this.event = event;
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
@@ -97,4 +103,11 @@ public class JEvent extends JComponent {
         this.end = end;
     }
 
+    public Object getEvent() {
+        return event;
+    }
+
+    public void setEvent(Object event) {
+        this.event = event;
+    }    
 }

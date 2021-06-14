@@ -31,8 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -53,6 +52,7 @@ public class PlanningFrame extends BaseFrame {
      */
     private List<Salle> listSalle;
     private List<Reunion> listReunion;
+    private List<Utilisateur> listUsers;
 
     /**
      * Graphic components
@@ -61,12 +61,16 @@ public class PlanningFrame extends BaseFrame {
     private TimePicker timePickerDebut, timePickerFin;
     private JScheduler planning;
     private JPanel schedulerHeaderPanel;
-    private JButton btnPrev, btnNext;
+    private JButton btnPrev, btnNext, btnRefresh;
+    private JComboBox cboSallesInHeader, cboSalles;
+    private java.awt.List formUserList;
 
     /**
      * Selected user
      */
-    private Utilisateur selectedUser;
+    private Reunion selectedReunion;
+    // Salle selected in header
+    private Salle selectedSalle;
 
     public PlanningFrame() {
         super();
@@ -110,9 +114,13 @@ public class PlanningFrame extends BaseFrame {
         schedulerHeaderPanel = new JPanel(new FlowLayout());
         this.btnPrev = new JButton("<<");
         schedulerHeaderPanel.add(this.btnPrev);
-        schedulerHeaderPanel.add(new JComboBox(this.listSalle.toArray()));
+        this.cboSallesInHeader = new JComboBox(this.listSalle.toArray());
+        schedulerHeaderPanel.add(cboSallesInHeader);
         this.btnNext = new JButton(">>");
         schedulerHeaderPanel.add(this.btnNext);
+        this.btnRefresh = new JButton(new ImageIcon(getClass().getResource("/refresh.png")));
+        this.btnRefresh.setToolTipText("Actualiser");
+        schedulerHeaderPanel.add(this.btnRefresh);
         pLeft.add(schedulerHeaderPanel, BorderLayout.NORTH);
 
         // Planning
@@ -133,6 +141,12 @@ public class PlanningFrame extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 planning.nextWeek();
+                loadEvents();
+            }
+        });
+        btnRefresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 loadEvents();
             }
         });
@@ -163,9 +177,11 @@ public class PlanningFrame extends BaseFrame {
          * Create empty JLabel to fill
          */
         this.pRight.add(new JLabel("Salle : "));
-        this.pRight.add(new JLabel());
-        this.pRight.add(new JLabel());
-        this.pRight.add(new JLabel());
+        cboSalles = new JComboBox(this.listSalle.toArray());
+        this.pRight.add(cboSalles);
+        this.pRight.add(new JLabel("Utilisateurs"));
+        formUserList = new java.awt.List();
+        this.pRight.add(formUserList);
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
@@ -187,7 +203,7 @@ public class PlanningFrame extends BaseFrame {
         validateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                updateEvent();
             }
         });
         addButton.addActionListener(new ActionListener() {
@@ -199,7 +215,7 @@ public class PlanningFrame extends BaseFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                
             }
         });
     }
@@ -215,19 +231,20 @@ public class PlanningFrame extends BaseFrame {
     /**
      * Load events on this week, based on planning date and salle
      */
-    private void loadEvents() {
+    public void loadEvents() {
         Calendar lundi = planning.getStartOfWeek();
         Calendar dimanche = planning.getEndOfWeek();
-        System.out.println("De " + lundi.getTime() + " à " + dimanche.getTime());
+        //System.out.println("De " + lundi.getTime() + " à " + dimanche.getTime());
         try {
-            this.listReunion = this.reunionModel.query("SELECT * FROM Reunion WHERE fin > ? AND debut < ?", Arrays.asList(lundi.getTime(), dimanche.getTime()));
+            this.listReunion = this.reunionModel.query(
+                    "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=?", 
+                    Arrays.asList(lundi.getTime(), dimanche.getTime(), true));
         } catch (Exception ex) {
             listReunion = new ArrayList<Reunion>();
             JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
         }
         // Reload events in planning
         planning.setEvents(getJEventsFromReunion(listReunion));
-        System.out.println(listReunion.size());
     }
 
     /**
@@ -242,16 +259,22 @@ public class PlanningFrame extends BaseFrame {
         for (Reunion r : list) {
             try {
                 // Instanciate event
-                JEvent evt = new JEvent(Color.CYAN, r.getDebut(), r.getFin(), r.getMotif(), "");
+                JEvent evt = new JEvent(Color.CYAN, r.getDebut(), r.getFin(), r.getMotif(), r);
 
                 // Add click listener
                 evt.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
+                        // Get selected object
                         JEvent source = (JEvent) e.getSource();
-                        datePicker.setDate(toLocalDate(source.getStart()));
-                        timePickerDebut.setTime(toLocalTime(source.getStart()));
-                        timePickerFin.setTime(toLocalTime(source.getEnd()));
+                        Reunion r = (Reunion) source.getEvent();
+                        
+                        selectedReunion = r;
+                        
+                        datePicker.setDate(toLocalDate(r.getDebut()));
+                        timePickerDebut.setTime(toLocalTime(r.getDebut()));
+                        timePickerFin.setTime(toLocalTime(r.getFin()));
+                        cboSalles.setSelectedIndex(listSalle.indexOf(getSalleFromId(selectedReunion.getSalle().getId())));
                     }
                 });
                 events.add(evt);
@@ -272,5 +295,28 @@ public class PlanningFrame extends BaseFrame {
     public LocalTime toLocalTime(Date d) {
         return LocalDateTime.ofInstant(d.toInstant(),
                 ZoneId.systemDefault()).toLocalTime();
+    }
+    
+    /**
+     * Return the salle of the list from its id
+     *
+     * @param id
+     * @return
+     */
+    public Salle getSalleFromId(Long id) {
+        for (Salle s : this.listSalle) {
+            if (s.getId().equals(id)) {
+                return s;
+            }
+        }
+        return null;
+    }
+    
+    
+    /**
+     * 
+     */
+    public void updateEvent() {
+        // TODO: Make this method
     }
 }

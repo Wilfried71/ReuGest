@@ -46,6 +46,7 @@ public class JScheduler extends JComponent {
     }
 
     public void setEvents(List<JEvent> events) {
+        this.removeAll();
         this.events = events;
         this.refresh();
     }
@@ -393,6 +394,7 @@ public class JScheduler extends JComponent {
          */
         for (JEvent evt : events) {
             remove(evt);
+            evt = null;
         }
     }
 

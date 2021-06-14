@@ -21,6 +21,8 @@ import javax.swing.JPanel;
 import fr.reugest.main.Globals;
 import fr.reugest.models.Droit;
 import fr.reugest.models.Utilisateur;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MenuFrame extends JFrame {
 
@@ -99,7 +101,7 @@ public class MenuFrame extends JFrame {
                         //Enable main menu frame
                         Globals.mainMenu.setEnabled(true);
                     }
-                });
+                });                
             }
         });
 
