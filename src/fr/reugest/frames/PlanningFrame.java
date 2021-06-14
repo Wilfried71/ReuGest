@@ -21,6 +21,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
@@ -218,6 +220,14 @@ public class PlanningFrame extends BaseFrame {
                 
             }
         });
+        // On change 
+        cboSallesInHeader.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                selectedSalle = (Salle) cboSallesInHeader.getSelectedItem();
+                loadEvents();
+            }
+        });
     }
 
     public void addRightsToAddButton() {
@@ -237,8 +247,8 @@ public class PlanningFrame extends BaseFrame {
         //System.out.println("De " + lundi.getTime() + " à " + dimanche.getTime());
         try {
             this.listReunion = this.reunionModel.query(
-                    "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=?", 
-                    Arrays.asList(lundi.getTime(), dimanche.getTime(), true));
+                    "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=? AND salle = ?", 
+                    Arrays.asList(lundi.getTime(), dimanche.getTime(), true, selectedSalle.getId()));
         } catch (Exception ex) {
             listReunion = new ArrayList<Reunion>();
             JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
@@ -259,7 +269,7 @@ public class PlanningFrame extends BaseFrame {
         for (Reunion r : list) {
             try {
                 // Instanciate event
-                JEvent evt = new JEvent(Color.CYAN, r.getDebut(), r.getFin(), r.getMotif(), r);
+                JEvent evt = new JEvent(Color.BLUE, r.getDebut(), r.getFin(), r.getMotif(), r);
 
                 // Add click listener
                 evt.addMouseListener(new MouseAdapter() {
