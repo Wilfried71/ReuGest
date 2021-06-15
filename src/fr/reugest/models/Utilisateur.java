@@ -128,4 +128,11 @@ public class Utilisateur {
         super();
     }
 
+    @Override
+    public String toString() {
+        return nom + " " + prenom;
+    }
+    
+    
+
 }

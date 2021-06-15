@@ -25,6 +25,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -38,6 +40,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class PlanningFrame extends BaseFrame {
 
@@ -48,6 +51,7 @@ public class PlanningFrame extends BaseFrame {
      */
     private Model<Salle> salleModel;
     private Model<Reunion> reunionModel;
+    private Model<Utilisateur> userModel;
 
     /**
      * Lists
@@ -66,6 +70,7 @@ public class PlanningFrame extends BaseFrame {
     private JButton btnPrev, btnNext, btnRefresh;
     private JComboBox cboSallesInHeader, cboSalles;
     private java.awt.List formUserList;
+    private JTextField txtMotif;
 
     /**
      * Selected user
@@ -87,12 +92,21 @@ public class PlanningFrame extends BaseFrame {
          */
         salleModel = new Model<Salle>(Salle.class);
         reunionModel = new Model<Reunion>(Reunion.class);
+        userModel = new Model<Utilisateur>(Utilisateur.class);
 
         // Load data
         this.loadFormData();
         // Load left and right panels
         this.loadLeftPanel();
         this.loadRightPanel();
+        
+        // After frame loaded
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                loadEvents();
+            }
+        });
     }
 
     /**
@@ -101,8 +115,16 @@ public class PlanningFrame extends BaseFrame {
     public void loadFormData() {
         try {
             this.listSalle = salleModel.findAll();
+            // On init, select the first element
+            selectedSalle = this.listSalle.get(0);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        
+        try {
+            listUsers = userModel.query("SELECT * FROM utilisateur WHERE isDeleted = ? ORDER BY nom,prenom", Arrays.asList(false));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -161,6 +183,11 @@ public class PlanningFrame extends BaseFrame {
         // Set right panel
         this.pRight.setLayout(new GridLayout(10, 2, 25, 10));
 
+        // Motif
+        this.pRight.add(new JLabel("Motif : "));
+        this.txtMotif = new JTextField();
+        this.pRight.add(txtMotif);
+        
         // Datepicker
         this.datePicker = new DatePicker();
         this.pRight.add(new JLabel("Date : "));
@@ -174,18 +201,22 @@ public class PlanningFrame extends BaseFrame {
         this.timePickerFin = new TimePicker();
         this.pRight.add(new JLabel("Heure de fin : "));
         this.pRight.add(timePickerFin);
-
-        /**
-         * Create empty JLabel to fill
-         */
-        this.pRight.add(new JLabel("Salle : "));
-        cboSalles = new JComboBox(this.listSalle.toArray());
-        this.pRight.add(cboSalles);
+        
+        // Users
         this.pRight.add(new JLabel("Utilisateurs"));
         formUserList = new java.awt.List();
+        this.fillUserList();
         this.pRight.add(formUserList);
-        this.pRight.add(new JLabel());
-        this.pRight.add(new JLabel());
+        
+        // Salle
+        this.pRight.add(new JLabel("Salle : "));
+        cboSalles = new JComboBox(this.listSalle.toArray());
+        this.pRight.add(cboSalles);        
+        
+        
+        /**
+         * Create empty JLabel to fill
+         */        
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
@@ -285,6 +316,8 @@ public class PlanningFrame extends BaseFrame {
                         timePickerDebut.setTime(toLocalTime(r.getDebut()));
                         timePickerFin.setTime(toLocalTime(r.getFin()));
                         cboSalles.setSelectedIndex(listSalle.indexOf(getSalleFromId(selectedReunion.getSalle().getId())));
+                        txtMotif.setText(r.getMotif());
+                        validateButton.setEnabled(true);
                     }
                 });
                 events.add(evt);
@@ -322,7 +355,13 @@ public class PlanningFrame extends BaseFrame {
         return null;
     }
     
-    
+    public void fillUserList() {
+        formUserList.removeAll();
+        for (Utilisateur u : listUsers) {
+            formUserList.add(u.toString());
+        }
+    }
+        
     /**
      * 
      */

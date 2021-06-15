@@ -20,9 +20,8 @@ import javax.swing.JPanel;
 
 import fr.reugest.main.Globals;
 import fr.reugest.models.Droit;
-import fr.reugest.models.Utilisateur;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import fr.reugest.models.Salle;
+import fr.thomas.orm.Model;
 
 public class MenuFrame extends JFrame {
 
@@ -82,26 +81,37 @@ public class MenuFrame extends JFrame {
         itemReserver.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Create new equipements frame
-                PlanningFrame planningFrame = new PlanningFrame();
 
-                // Disable the main menu frame
-                Globals.mainMenu.setEnabled(false);
-
-                /**
-                 * When the users Frame is closed, activate menu form
-                 */
-                planningFrame.setVisible(true);
-
-                // When frame is closed
-                planningFrame.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        super.windowClosed(e);
-                        //Enable main menu frame
-                        Globals.mainMenu.setEnabled(true);
+                try {
+                    /**
+                     * Check if there is at least one salle
+                     */
+                    Model<Salle> salleModel = new Model<>(Salle.class);
+                    if (salleModel.findAll().size() != 0) {
+                        // Create new equipements frame
+                        PlanningFrame planningFrame = new PlanningFrame();
+                        
+                        // Disable the main menu frame
+                        Globals.mainMenu.setEnabled(false);
+                        
+                        /**
+                         * When the users Frame is closed, activate menu form
+                         */
+                        planningFrame.setVisible(true);
+                        
+                        // When frame is closed
+                        planningFrame.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                super.windowClosed(e);
+                                //Enable main menu frame
+                                Globals.mainMenu.setEnabled(true);
+                            }
+                        });
                     }
-                });                
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Aucune salle créée.\nVeuillez en créer une.", "Information", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
 
