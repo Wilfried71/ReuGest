@@ -3,6 +3,7 @@ package fr.reugest.frames;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import fr.reugest.main.Globals;
+import fr.reugest.models.Concerner;
 import fr.reugest.models.Reunion;
 import java.awt.GridLayout;
 import java.util.List;
@@ -52,6 +53,7 @@ public class PlanningFrame extends BaseFrame {
     private Model<Salle> salleModel;
     private Model<Reunion> reunionModel;
     private Model<Utilisateur> userModel;
+    private Model<Concerner> concernerModel;
 
     /**
      * Lists
