@@ -11,14 +11,14 @@ import fr.thomas.orm.annotations.Table;
  */
 @Table(name = "concerner")
 public class ConcernerLight {
-
-    @PrimaryKey
-    @Column(name = "utilisateur")
-    private Long utilisateur;
-
+    
     @PrimaryKey
     @Column(name = "reunion")
     private Long reunion;
+
+    @PrimaryKey
+    @Column(name = "utilisateur")
+    private Long utilisateur;    
 
     public ConcernerLight(Long utilisateur, Long reunion) {
         super();

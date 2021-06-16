@@ -3,6 +3,7 @@ package fr.reugest.frames;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import fr.reugest.main.Globals;
+import fr.reugest.models.Affectation;
 import fr.reugest.models.Concerner;
 import fr.reugest.models.Reunion;
 import java.awt.GridLayout;
@@ -13,6 +14,8 @@ import javax.swing.border.EmptyBorder;
 
 import fr.reugest.models.Salle;
 import fr.reugest.models.Utilisateur;
+import fr.reugest.models.light.ConcernerLight;
+import fr.reugest.models.light.ReunionLight;
 import fr.thomas.orm.Model;
 import fr.thomas.swing.JEvent;
 import fr.thomas.swing.JScheduler;
@@ -36,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -101,7 +106,7 @@ public class PlanningFrame extends BaseFrame {
         // Load left and right panels
         this.loadLeftPanel();
         this.loadRightPanel();
-        
+
         // After frame loaded
         addWindowListener(new WindowAdapter() {
             @Override
@@ -122,7 +127,7 @@ public class PlanningFrame extends BaseFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         try {
             listUsers = userModel.query("SELECT * FROM utilisateur WHERE isDeleted = ? ORDER BY nom,prenom", Arrays.asList(false));
         } catch (Exception ex) {
@@ -189,7 +194,7 @@ public class PlanningFrame extends BaseFrame {
         this.pRight.add(new JLabel("Motif : "));
         this.txtMotif = new JTextField();
         this.pRight.add(txtMotif);
-        
+
         // Datepicker
         this.datePicker = new DatePicker();
         this.pRight.add(new JLabel("Date : "));
@@ -203,22 +208,23 @@ public class PlanningFrame extends BaseFrame {
         this.timePickerFin = new TimePicker();
         this.pRight.add(new JLabel("Heure de fin : "));
         this.pRight.add(timePickerFin);
-        
+
         // Users
         this.pRight.add(new JLabel("Utilisateurs"));
         formUserList = new java.awt.List();
+        // Allow multiple selection
+        formUserList.setMultipleMode(true);
         this.fillUserList();
         this.pRight.add(formUserList);
-        
+
         // Salle
         this.pRight.add(new JLabel("Salle : "));
         cboSalles = new JComboBox(this.listSalle.toArray());
-        this.pRight.add(cboSalles);        
-        
-        
+        this.pRight.add(cboSalles);
+
         /**
          * Create empty JLabel to fill
-         */        
+         */
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
         this.pRight.add(new JLabel());
@@ -250,7 +256,7 @@ public class PlanningFrame extends BaseFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
             }
         });
         // On change 
@@ -280,7 +286,7 @@ public class PlanningFrame extends BaseFrame {
         //System.out.println("De " + lundi.getTime() + " à " + dimanche.getTime());
         try {
             this.listReunion = this.reunionModel.query(
-                    "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=? AND salle = ?", 
+                    "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=? AND salle = ?",
                     Arrays.asList(lundi.getTime(), dimanche.getTime(), true, selectedSalle.getId()));
         } catch (Exception ex) {
             listReunion = new ArrayList<Reunion>();
@@ -311,14 +317,15 @@ public class PlanningFrame extends BaseFrame {
                         // Get selected object
                         JEvent source = (JEvent) e.getSource();
                         Reunion r = (Reunion) source.getEvent();
-                        
+
                         selectedReunion = r;
-                        
+
                         datePicker.setDate(toLocalDate(r.getDebut()));
                         timePickerDebut.setTime(toLocalTime(r.getDebut()));
                         timePickerFin.setTime(toLocalTime(r.getFin()));
                         cboSalles.setSelectedIndex(listSalle.indexOf(getSalleFromId(selectedReunion.getSalle().getId())));
                         txtMotif.setText(r.getMotif());
+                        toggleSelectedUsers();
                         validateButton.setEnabled(true);
                     }
                 });
@@ -341,7 +348,7 @@ public class PlanningFrame extends BaseFrame {
         return LocalDateTime.ofInstant(d.toInstant(),
                 ZoneId.systemDefault()).toLocalTime();
     }
-    
+
     /**
      * Return the salle of the list from its id
      *
@@ -356,18 +363,135 @@ public class PlanningFrame extends BaseFrame {
         }
         return null;
     }
-    
+
     public void fillUserList() {
         formUserList.removeAll();
         for (Utilisateur u : listUsers) {
             formUserList.add(u.toString());
         }
     }
-        
+
     /**
-     * 
+     * Get selected users for selectedReunion
+     */
+    private void toggleSelectedUsers() {
+        Model<ConcernerLight> model = new Model<ConcernerLight>(ConcernerLight.class);
+        List<ConcernerLight> concernList = new ArrayList<>();
+        /**
+         * reset selection
+         */
+        for (int i = 0; i < listUsers.size(); i++) {
+            formUserList.deselect(i);
+        }
+
+        // Get associations
+        try {
+            concernList = model.query("SELECT * FROM concerner WHERE reunion = ?", Arrays.asList(selectedReunion.getId()));
+        } catch (Exception ex) {
+            Logger.getLogger(PlanningFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // Toggle each association
+        for (ConcernerLight c : concernList) {
+            formUserList.select(getUserIndexInList(c.getUtilisateur()));
+        }
+    }
+
+    /**
+     * Get the index of a specified user in the userList
+     *
+     * @return
+     */
+    private int getUserIndexInList(Long id) {
+        for (int i = 0; i < listUsers.size(); i++) {
+            if (listUsers.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Update the event
      */
     public void updateEvent() {
-        // TODO: Make this method
+        ReunionLight r = new ReunionLight();
+
+        // Get start date
+        Calendar debut = Calendar.getInstance();
+        debut.set(Calendar.YEAR, datePicker.getDate().getYear());
+        debut.set(Calendar.MONTH, datePicker.getDate().getMonthValue() - 1);
+        debut.set(Calendar.DAY_OF_MONTH, datePicker.getDate().getDayOfMonth());
+        debut.set(Calendar.HOUR_OF_DAY, timePickerDebut.getTime().getHour());
+        debut.set(Calendar.MINUTE, timePickerDebut.getTime().getMinute());
+        debut.set(Calendar.SECOND, 0);
+
+        // Get end date
+        Calendar fin = Calendar.getInstance();
+        fin.set(Calendar.YEAR, datePicker.getDate().getYear());
+        fin.set(Calendar.MONTH, datePicker.getDate().getMonthValue() - 1);
+        fin.set(Calendar.DAY_OF_MONTH, datePicker.getDate().getDayOfMonth());
+        fin.set(Calendar.HOUR_OF_DAY, timePickerFin.getTime().getHour());
+        fin.set(Calendar.MINUTE, timePickerFin.getTime().getMinute());
+        fin.set(Calendar.SECOND, 0);
+
+        // Set attributes
+        r.setId(selectedReunion.getId());
+        r.setMotif(txtMotif.getText());
+        r.setDebut(debut.getTime());
+        r.setFin(fin.getTime());
+        r.setIsValid(true);
+        r.setIdSalle(((Salle) cboSalles.getSelectedItem()).getId());
+
+        if (!debut.after(fin)) {
+            // Get events that are overlaped
+            List<Reunion> overlapEvents = new ArrayList<>();
+            try {
+                overlapEvents = reunionModel.query(
+                        "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=? AND salle = ? AND id != ?",
+                        Arrays.asList(debut.getTime(), fin.getTime(), true, r.getIdSalle(), r.getId()));
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
+            }
+            // If ther is no overlap
+            if (overlapEvents.isEmpty()) {
+                try {
+                    // Update reunionLight
+                    (new Model<ReunionLight>(ReunionLight.class)).update(r);
+
+                    /**
+                     * Update links
+                     */
+                    Model<ConcernerLight> concernModel = new Model<>(ConcernerLight.class);
+                    List<Utilisateur> selectedUsers = new ArrayList<>();
+                    // Delete 
+                    List<ConcernerLight> existing = concernModel.query("SELECT * FROM concerner WHERE reunion = ?", Arrays.asList(selectedReunion.getId()));
+                    for (ConcernerLight c : existing) {
+                        concernModel.delete(c);
+                    }
+
+                    // Get selected users
+                    for (int i = 0; i < listUsers.size(); i++) {
+                        if (formUserList.isIndexSelected(i)) {
+                            selectedUsers.add(listUsers.get(i));
+                        }
+                    }
+                    for (Utilisateur u : selectedUsers) {
+                        ConcernerLight cl = new ConcernerLight(u.getId(), r.getId());
+                        concernModel.create(cl);
+                    }
+                    JOptionPane.showMessageDialog(null, "La réunion a bien été modifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
+
+                    // Reload events
+                    loadEvents();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vous ne pouvez pas déplacer cette réunion à ce moment là.\nUne autre réunion occupe déjà ce créneau.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Le début ne peut pas être après la fin.", "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 }
