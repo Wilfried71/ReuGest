@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JComponent;
 
@@ -47,7 +46,9 @@ public class JScheduler extends JComponent {
     }
 
     public void setEvents(List<JEvent> events) {
+        this.removeAll();
         this.events = events;
+        this.refresh();
     }
 
     public Color getHeaderColor() {
@@ -72,7 +73,6 @@ public class JScheduler extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         // Reset all events on the screen
-
         resetEvents();
 
         // Reset graphics
@@ -394,6 +394,7 @@ public class JScheduler extends JComponent {
          */
         for (JEvent evt : events) {
             remove(evt);
+            evt = null;
         }
     }
 

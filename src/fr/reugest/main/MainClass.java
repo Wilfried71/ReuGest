@@ -27,6 +27,7 @@ public class MainClass {
      */
     public static void main(String[] args) {
         
+        
         /**
          * Load data from application.properties
          */
