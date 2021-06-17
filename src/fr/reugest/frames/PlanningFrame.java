@@ -2,6 +2,7 @@ package fr.reugest.frames;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
+import fr.reugest.frames.createmodal.ReunionCreateModal;
 import fr.reugest.main.Globals;
 import fr.reugest.models.Affectation;
 import fr.reugest.models.Concerner;
@@ -16,6 +17,7 @@ import fr.reugest.models.Salle;
 import fr.reugest.models.Utilisateur;
 import fr.reugest.models.light.ConcernerLight;
 import fr.reugest.models.light.ReunionLight;
+import fr.reugest.models.light.UtilisateurLight;
 import fr.thomas.orm.Model;
 import fr.thomas.swing.JEvent;
 import fr.thomas.swing.JScheduler;
@@ -250,13 +252,47 @@ public class PlanningFrame extends BaseFrame {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                setEnabled(false);
+                ReunionCreateModal createModal = new ReunionCreateModal();
+                createModal.setVisible(true);
             }
         });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int input = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'enregistrement ?\n\nCette action est irréversible.", "Select an Option...",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                // If YES
+                if (input == 0) {
+                    try {
+                        // Delete in DB
+                        Model<ConcernerLight> concernModel = new Model<>(ConcernerLight.class);
+                        // Delete links
+                        List<ConcernerLight> existing = concernModel.query("SELECT * FROM concerner WHERE reunion = ?", Arrays.asList(selectedReunion.getId()));
+                        for (ConcernerLight c : existing) {
+                            concernModel.delete(c);
+                        }
+                        reunionModel.delete(selectedReunion);
 
+                        JOptionPane.showMessageDialog(null, "Réunion correctement supprimée.");
+                        /**
+                         * Reset fields
+                         */
+                        selectedReunion = null;
+                        validateButton.setEnabled(false);
+                        deleteButton.setEnabled(false);
+                        txtMotif.setText("");
+                        datePicker.setDate(null);
+                        timePickerDebut.setTime(null);
+                        timePickerFin.setTime(null);
+                        for (int i = 0; i < listUsers.size(); i++) {
+                            formUserList.deselect(i);
+                        }
+                        loadEvents();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
+                    }
+                }
             }
         });
         // On change 
@@ -274,6 +310,12 @@ public class PlanningFrame extends BaseFrame {
         if (Globals.user.getDroit().getId().equals(1L)) {
             addButton.setVisible(false);
             deleteButton.setVisible(false);
+            txtMotif.setEnabled(false);
+            datePicker.setEnabled(false);
+            timePickerDebut.setEnabled(false);
+            timePickerFin.setEnabled(false);
+            cboSalles.setEnabled(false);
+            formUserList.setEnabled(false);
         }
     }
 
@@ -327,6 +369,7 @@ public class PlanningFrame extends BaseFrame {
                         txtMotif.setText(r.getMotif());
                         toggleSelectedUsers();
                         validateButton.setEnabled(true);
+                        deleteButton.setEnabled(true);
                     }
                 });
                 events.add(evt);

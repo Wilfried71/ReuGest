@@ -242,7 +242,7 @@ public class MenuFrame extends JFrame {
          */
         planningMenu = new JMenu("Planning");
         itemReserver = new JMenuItem("Réserver");
-        itemImprimer = new JMenuItem("Imprimer");
+        itemImprimer = new JMenuItem("Mon planning");
         planningMenu.add(itemReserver);
         planningMenu.add(itemImprimer);
         mb.add(planningMenu);
