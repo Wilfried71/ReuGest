@@ -44,7 +44,13 @@ public class Globals {
         usersFrame = new UsersFrame();
         usersFrame.setVisible(true);
     }
-
+    
+    public static void reloadRoomsFrame() {
+        roomsFrame.dispose();
+        roomsFrame = new RoomsFrame();
+        roomsFrame.setVisible(true);
+    }
+    
     public static void Rooms() {
         roomsFrame.dispose();
         roomsFrame = new RoomsFrame();

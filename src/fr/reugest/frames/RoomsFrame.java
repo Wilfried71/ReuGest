@@ -1,6 +1,6 @@
 package fr.reugest.frames;
 
-import fr.reugest.frames.createmodal.UserCreateModal;
+import fr.reugest.frames.createmodal.RoomCreateModal;
 import fr.reugest.main.Globals;
 import static fr.reugest.main.Globals.roomsFrame;
 import java.awt.Dimension;
@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
@@ -52,7 +53,10 @@ public class RoomsFrame extends BaseFrame {
 
     private String[] columns = new String[]{"Libelle", "Places"};
     private List<Equipement> listEquipements;
-
+    private java.awt.List formListEquipements;
+    
+    private Salle selectedRoom;
+    
     public RoomsFrame() {
         super();
         // Store in global variables
@@ -103,6 +107,9 @@ public class RoomsFrame extends BaseFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 validateButton.setEnabled(true);
+                deleteButton.setEnabled(true);
+                
+                //selectedRoom = listSalles.get(table.getSelectedRow());
 
                 selectedSalle = listSalles.get(table.getSelectedRow());
                 // Fill form fields
@@ -130,9 +137,13 @@ public class RoomsFrame extends BaseFrame {
      */
     private void loadRightPanel() {
         
+        
+        
         //loadEquipementsInJTable();
         // Set right panel
         this.pRight.setLayout(new GridLayout(10, 2, 25, 10));
+        
+        
 
         this.pRight.add(new JLabel("Libelle : ", JLabel.RIGHT));
         txtLibelle = new JTextField();
@@ -142,11 +153,19 @@ public class RoomsFrame extends BaseFrame {
         txtPlaces = new JTextField();
         this.pRight.add(txtPlaces);
         
-        for(Equipement e: listEquipements){
-            this.pRight.add(new JLabel("Equipement : ", JLabel.RIGHT));
+        this.pRight.add(new JLabel("Equipements : ", JLabel.RIGHT)); 
+        formListEquipements = new java.awt.List();
+        this.pRight.add(formListEquipements);
+        this.loadEquipementsInJList();
+        
+        
+        
+        
+        /*for(Equipement e: listEquipements){
+            this.formListEquipements.add(new JLabel("Equipement : ", JLabel.RIGHT));
             JCheckBox checkbox = new JCheckBox(e.getLibelle());
-            this.pRight.add(checkbox);
-        }
+            this.formListEquipements.add(checkbox);
+        }*/
 
         
 
@@ -169,6 +188,8 @@ public class RoomsFrame extends BaseFrame {
         
         
         
+        
+        
         this.pRight.add(this.validateButton);
         this.validateButton.setEnabled(false);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -180,7 +201,7 @@ public class RoomsFrame extends BaseFrame {
             public void actionPerformed(ActionEvent e) {
                 String libelle = txtLibelle.getText();
                 //System.out.println(Nom);
-                //Long places = txtPlaces.getText();
+                long num = Long.parseLong(txtPlaces.getText());
                 //System.out.println(Prenom);
                 //System.out.println(Email);
                 //System.out.println(Droit);
@@ -192,10 +213,10 @@ public class RoomsFrame extends BaseFrame {
                     updatedSalle.setPlaces(Long.parseLong(txtPlaces.getText()));
 
                     updatedSalle.setId(selectedSalle.getId());
-                    Model model = new Model<UtilisateurLight>(UtilisateurLight.class);
+                    Model model = new Model<SalleLight>(SalleLight.class);
                     try {
                         model.update(updatedSalle);
-                        JOptionPane.showMessageDialog(null, "Utilisateur mofifié avec succès");
+                        JOptionPane.showMessageDialog(null, "Salle mofifié avec succès");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
                     }
@@ -208,8 +229,30 @@ public class RoomsFrame extends BaseFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setEnabled(false);
-                UserCreateModal createModal = new UserCreateModal();
+                RoomCreateModal createModal = new RoomCreateModal();
                 createModal.setVisible(true);
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment supprimer l'enregistrement ?\n\nCette action est irréversible.", "Select an Option...",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                // If YES
+                if (input == 0) {
+                    try {
+                        Model<SalleLight> model = new Model<>(SalleLight.class);
+                        SalleLight light = new SalleLight(selectedSalle.getId(),
+                                selectedSalle.getLibelle(),
+                                selectedSalle.getPlaces());
+                        // Update in DB
+                        model.delete(light);
+                        JOptionPane.showMessageDialog(null, "Utilisateur correctement supprimé.");
+                        Globals.reloadRoomsFrame();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
+                    }
+                }
             }
         });
     }
@@ -239,22 +282,15 @@ public class RoomsFrame extends BaseFrame {
         this.table.setFillsViewportHeight(true);*/
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
-    public void loadEquipementsInJTable() {
-
-        DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+    public void loadEquipementsInJList() {
+        
+        formListEquipements.removeAll();
 
         for (Equipement u : this.listEquipements) {
-            tableModel
-                    .addRow(new Object[]{u.getLibelle()});
+            formListEquipements.add(u.getLibelle());
         }
-        this.table = new JTable(tableModel);
         
-        this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        this.formListEquipements.setMultipleMode(true);
     }
 
 
