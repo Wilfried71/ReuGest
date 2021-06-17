@@ -110,8 +110,8 @@ public class JScheduler extends JComponent {
         Calendar huitHeures = Calendar.getInstance();
         huitHeures.set(Calendar.HOUR_OF_DAY, 8);
         huitHeures.set(Calendar.MINUTE, 00);
-        Calendar today = Calendar.getInstance();
-        int y = this.getOrdByHour(huitHeures, today) + p(getHeight(), 7) + 1;
+        //Calendar today = Calendar.getInstance();
+        int y = this.getOrdByHour(huitHeures, calendar) + p(getHeight(), 7) + 1;
         g.setColor(Color.RED);
         g.drawLine(0, y, getWidth(), y);
     }
