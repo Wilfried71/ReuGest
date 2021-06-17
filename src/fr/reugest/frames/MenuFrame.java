@@ -90,15 +90,15 @@ public class MenuFrame extends JFrame {
                     if (salleModel.findAll().size() != 0) {
                         // Create new equipements frame
                         PlanningFrame planningFrame = new PlanningFrame();
-                        
+
                         // Disable the main menu frame
                         Globals.mainMenu.setEnabled(false);
-                        
+
                         /**
                          * When the users Frame is closed, activate menu form
                          */
                         planningFrame.setVisible(true);
-                        
+
                         // When frame is closed
                         planningFrame.addWindowListener(new WindowAdapter() {
                             @Override
@@ -235,6 +235,7 @@ public class MenuFrame extends JFrame {
                     });
                 }
             });
+
         }
 
         /**
@@ -246,6 +247,35 @@ public class MenuFrame extends JFrame {
         planningMenu.add(itemReserver);
         planningMenu.add(itemImprimer);
         mb.add(planningMenu);
+
+        /**
+         * Add onClick listener to "Mon planning" item
+         */
+        itemImprimer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Create new frame
+                PrintFrame printFrame = new PrintFrame();
+
+                // Disable the main menu frame
+                Globals.mainMenu.setEnabled(false);
+
+                /**
+                 * When the Frame is closed, activate menu form
+                 */
+                printFrame.setVisible(true);
+
+                // When frame is closed
+                printFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        super.windowClosed(e);
+                        //Enable main menu frame
+                        Globals.mainMenu.setEnabled(true);
+                    }
+                });
+            }
+        });
 
         /**
          * Help menu

@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -60,6 +61,8 @@ public class ConnexionFrame extends JFrame {
 
     public ConnexionFrame() {
         super("Connexion");
+        // Change icon
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/logo_64.png")));
         this.setBounds(100, 100, 350, 300);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
