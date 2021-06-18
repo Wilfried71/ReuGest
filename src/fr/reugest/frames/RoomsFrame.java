@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import fr.reugest.models.Equipement;
 import fr.reugest.models.Salle;
+import fr.reugest.models.Utilisateur;
 import fr.reugest.models.light.AffectationLight;
 import fr.reugest.models.light.ConcernerLight;
 import fr.reugest.models.light.SalleLight;
@@ -111,7 +112,7 @@ public class RoomsFrame extends BaseFrame {
                 txtPlaces.setText(selectedSalle.getPlaces().toString());
                 // Change selection
                 toggleSelectedEquipement();
-                
+
                 // Change state to EDITING
                 state = BaseFrame.State.EDITING;
             }
@@ -182,28 +183,49 @@ public class RoomsFrame extends BaseFrame {
         validateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Get properties from form
                 String libelle = txtLibelle.getText();
-                //System.out.println(Nom);
                 long num = Long.parseLong(txtPlaces.getText());
-                //System.out.println(Prenom);
-                //System.out.println(Email);
-                //System.out.println(Droit);
-                //utilisateurModel.update(selectedSalle)
-                System.out.println(selectedSalle);
                 SalleLight updatedSalle = new SalleLight();
                 updatedSalle.setLibelle(libelle);
                 try {
                     updatedSalle.setPlaces(Long.parseLong(txtPlaces.getText()));
-
                     updatedSalle.setId(selectedSalle.getId());
-                    Model model = new Model<SalleLight>(SalleLight.class);
+                    /**
+                     * Create model
+                     */
+                    Model<SalleLight> model = new Model<SalleLight>(SalleLight.class);
                     try {
                         model.update(updatedSalle);
-                        JOptionPane.showMessageDialog(null, "Salle mofifié avec succès");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Erreur :\n" + ex.getMessage());
                     }
-                } catch (NumberFormatException ex) {
+
+                    /**
+                     * Update links
+                     */
+                    Model<AffectationLight> affectModel = new Model<>(AffectationLight.class);
+                    List<Equipement> selectedEquipements = new ArrayList<>();
+                    // Delete 
+                    List<AffectationLight> existing = affectModel.query("SELECT * FROM affectation WHERE salle = ?", Arrays.asList(selectedSalle.getId()));
+                    for (AffectationLight a : existing) {
+                        affectModel.delete(a);
+                    }
+
+                    // Get selected equipements
+                    for (int i = 0; i < listEquipements.size(); i++) {
+                        if (formListEquipements.isIndexSelected(i)) {
+                            selectedEquipements.add(listEquipements.get(i));
+                        }
+                    }
+                    for (Equipement equipement : selectedEquipements) {
+                        AffectationLight al = new AffectationLight(equipement.getId(), selectedSalle.getId());
+                        affectModel.create(al);
+                    }
+                    JOptionPane.showMessageDialog(null, "La salle a bien été modifiée", "Information", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    Globals.reloadRoomsFrame();
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Erreur : \nVeuillez entrer un nombre");
                 }
             }
@@ -301,7 +323,7 @@ public class RoomsFrame extends BaseFrame {
 
         this.formListEquipements.setMultipleMode(true);
     }
-    
+
     /**
      * Get selected users for selectedReunion
      */
