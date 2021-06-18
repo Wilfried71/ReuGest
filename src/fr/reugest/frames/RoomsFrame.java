@@ -296,8 +296,12 @@ public class RoomsFrame extends BaseFrame {
                 
                 String affichageEquipements = "";
                 for (Equipement e : equipements) {
-                    affichageEquipements+=e.toString();
+                    affichageEquipements+=e.toString()+", ";
                 }
+                if(affichageEquipements.length()>2){
+                    affichageEquipements = affichageEquipements.substring(0, affichageEquipements.length() - 2);
+                }
+                
                 tableModel.addRow(new Object[]{s.getLibelle(), s.getPlaces(), affichageEquipements});
                 
 
