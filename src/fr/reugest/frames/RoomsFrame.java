@@ -3,6 +3,7 @@ package fr.reugest.frames;
 import fr.reugest.frames.createmodal.RoomCreateModal;
 import fr.reugest.main.Globals;
 import static fr.reugest.main.Globals.roomsFrame;
+import fr.reugest.models.Affectation;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.List;
@@ -24,11 +25,13 @@ import fr.reugest.models.Fonction;
 import fr.reugest.models.Salle;
 import fr.reugest.models.Service;
 import fr.reugest.models.Utilisateur;
+import fr.reugest.models.light.AffectationLight;
 import fr.reugest.models.light.SalleLight;
 import fr.reugest.models.light.UtilisateurLight;
 import fr.thomas.orm.Model;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -50,12 +53,16 @@ public class RoomsFrame extends BaseFrame {
      * Selected user
      */
     private Salle selectedSalle;
+    private Affectation selectedAffectation;
 
-    private String[] columns = new String[]{"Libelle", "Places"};
+    private String[] columns = new String[]{"Libelle", "Places", "Equipements"};
     private List<Equipement> listEquipements;
     private java.awt.List formListEquipements;
     
-    private Salle selectedRoom;
+    
+   
+    
+    
     
     public RoomsFrame() {
         super();
@@ -241,13 +248,20 @@ public class RoomsFrame extends BaseFrame {
                 // If YES
                 if (input == 0) {
                     try {
+                        /*Model<AffectationLight> model2 = new Model<>(AffectationLight.class);
+                        AffectationLight light2 = new AffectationLight(selectedSalle.getId());*/
+                        Model<AffectationLight> affectationModel = new Model<>(AffectationLight.class);
+                        List<AffectationLight> equipements = affectationModel.query("SELECT * FROM affectation WHERE salle = ?" , Arrays.asList(selectedSalle.getId()));
+                        for (AffectationLight equipement : equipements) {
+                           affectationModel.delete(equipement);
+                        }
                         Model<SalleLight> model = new Model<>(SalleLight.class);
                         SalleLight light = new SalleLight(selectedSalle.getId(),
                                 selectedSalle.getLibelle(),
                                 selectedSalle.getPlaces());
                         // Update in DB
                         model.delete(light);
-                        JOptionPane.showMessageDialog(null, "Utilisateur correctement supprimé.");
+                        JOptionPane.showMessageDialog(null, "Salle correctement supprimé.");
                         Globals.reloadRoomsFrame();
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
@@ -262,7 +276,9 @@ public class RoomsFrame extends BaseFrame {
      */
     
     public void loadSallesInJTable() {
-
+        
+        
+        
         DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -270,9 +286,27 @@ public class RoomsFrame extends BaseFrame {
             }
         };
 
-        for (Salle u : this.listSalles) {
-            tableModel
-                    .addRow(new Object[]{u.getLibelle(), u.getPlaces()});
+        for (Salle s : this.listSalles) {
+            
+            long a = s.getId();
+            try {
+                
+                List<Equipement> equipements = equipementModel.query("SELECT * FROM equipement WHERE id IN (SELECT equipement FROM affectation WHERE salle = ?)" , Arrays.asList(a));
+                
+                
+                String affichageEquipements = "";
+                for (Equipement e : equipements) {
+                    affichageEquipements+=e.toString();
+                }
+                tableModel.addRow(new Object[]{s.getLibelle(), s.getPlaces(), affichageEquipements});
+                
+
+            
+            } catch (Exception ex) {
+                ex.printStackTrace();
+        
+            }
+            
         }
         this.table = new JTable(tableModel);
         

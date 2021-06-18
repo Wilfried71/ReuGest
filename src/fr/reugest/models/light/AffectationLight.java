@@ -13,12 +13,14 @@ import fr.thomas.orm.annotations.Table;
 public class AffectationLight {
 
     @PrimaryKey
+    @Column(name = "salle")
+    private Long idSalle;
+    
+    @PrimaryKey
     @Column(name = "equipement")
     private Long idEquipement;
 
-    @PrimaryKey
-    @Column(name = "salle")
-    private Long idSalle;
+    
 
     public AffectationLight(Long equipement, Long salle) {
         super();
