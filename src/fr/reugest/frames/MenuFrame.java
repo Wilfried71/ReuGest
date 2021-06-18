@@ -28,7 +28,7 @@ public class MenuFrame extends JFrame {
     private JPanel panneau;
     private JMenu gestionMenu, planningMenu, aideMenu;
     private JMenuItem itemUtilisateurs, itemSalles, itemEquipements, itemReserver, itemImprimer, itemParametres,
-            itemAbout;
+            itemAbout, itemAdminReunions;
     private JMenuBar mb;
 
     public MenuFrame() {
@@ -244,8 +244,12 @@ public class MenuFrame extends JFrame {
         planningMenu = new JMenu("Planning");
         itemReserver = new JMenuItem("Réserver");
         itemImprimer = new JMenuItem("Mon planning");
+        itemAdminReunions = new JMenuItem("Demandes");
         planningMenu.add(itemReserver);
         planningMenu.add(itemImprimer);
+        if(Globals.user.getDroit().getId().equals(3L)) {
+            planningMenu.add(itemAdminReunions);
+        }
         mb.add(planningMenu);
 
         /**
@@ -256,6 +260,35 @@ public class MenuFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Create new frame
                 PrintFrame printFrame = new PrintFrame();
+
+                // Disable the main menu frame
+                Globals.mainMenu.setEnabled(false);
+
+                /**
+                 * When the Frame is closed, activate menu form
+                 */
+                printFrame.setVisible(true);
+
+                // When frame is closed
+                printFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        super.windowClosed(e);
+                        //Enable main menu frame
+                        Globals.mainMenu.setEnabled(true);
+                    }
+                });
+            }
+        });
+        
+        /**
+         * Add onClick listener to "Mon planning" item
+         */
+        itemAdminReunions.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Create new frame
+                AdminFrame printFrame = new AdminFrame();
 
                 // Disable the main menu frame
                 Globals.mainMenu.setEnabled(false);

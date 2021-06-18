@@ -46,17 +46,11 @@ public class FramePrincipal extends JFrame {
         f.setLayout(null);
         f.setVisible(true);
         this.boutonQuitter.addActionListener(new EcouteurBoutonQuitter());
-        // labelImg.setIcon(img);
     }
 
     class EcouteurBoutonQuitter implements ActionListener {
-
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Il s'agit du bouton Quitter");
             System.exit(0);
-
         }
-
     }
-
 }

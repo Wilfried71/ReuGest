@@ -1,5 +1,6 @@
 package fr.reugest.main;
 
+import fr.reugest.frames.AdminFrame;
 import fr.reugest.frames.EquipementFrame;
 import fr.reugest.frames.MenuFrame;
 import fr.reugest.frames.PlanningFrame;
@@ -30,6 +31,8 @@ public class Globals {
     public static RoomsFrame roomsFrame;
 
     public static EquipementFrame equipementFrame;
+    
+    public static AdminFrame adminFrame;
     
     public static PlanningFrame planningFrame;
 
@@ -67,5 +70,11 @@ public class Globals {
         planningFrame.dispose();
         planningFrame = new PlanningFrame();
         planningFrame.setVisible(true);
+    }
+    
+    public static void reloadAdminFrame() {
+        adminFrame.dispose();
+        adminFrame = new AdminFrame();
+        adminFrame.setVisible(true);
     }
 }

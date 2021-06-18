@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.reugest.main;
+package fr.reugest.util;
 
 import java.io.File;
 import javax.swing.filechooser.FileFilter;

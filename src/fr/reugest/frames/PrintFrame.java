@@ -5,7 +5,7 @@
  */
 package fr.reugest.frames;
 
-import fr.reugest.main.FileTypeFilter;
+import fr.reugest.util.FileTypeFilter;
 import fr.reugest.main.Globals;
 import fr.reugest.models.Reunion;
 import fr.thomas.orm.Model;
