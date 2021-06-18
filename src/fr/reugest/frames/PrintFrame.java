@@ -40,6 +40,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -118,11 +120,24 @@ public class PrintFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
+                                        
                     /**
                      * Get destination
                      */
                     JFileChooser fileChooser = new JFileChooser();
+                    
+                    /**
+                     * Change look and feel
+                     */
+                    LookAndFeel old = UIManager.getLookAndFeel();
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (Throwable ex) {
+                        old = null;
+                    }
+                    fileChooser.updateUI();
+                    
+                    // Set file chooser title
                     fileChooser.setDialogTitle("Choisissez un emplacement pour le fichier");
                     // File filter
                     FileFilter ff = new FileTypeFilter(".pdf", "Fichiers PDF");
@@ -168,10 +183,20 @@ public class PrintFrame extends JFrame {
 
                         // Delete temp screenshot
                         screenshot.delete();
-                        
+
                         // Open new file
                         Desktop.getDesktop().open(new File(dest));
                     }
+                    
+                    /**
+                     * Change look and feel
+                     */
+                    try {
+                        UIManager.setLookAndFeel(old);
+                    } catch (Throwable ex) {
+                        old = null;
+                    }
+                    fileChooser.updateUI();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Erreur", JOptionPane.WARNING_MESSAGE);
