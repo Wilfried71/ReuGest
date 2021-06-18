@@ -27,6 +27,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+/**
+ * Frame for equipement management.
+ * @author tpeyr
+ */
 public class EquipementFrame extends BaseFrame {
 
     private static final long serialVersionUID = -5481781563859385889L;
@@ -44,6 +48,9 @@ public class EquipementFrame extends BaseFrame {
 
     private String[] columns = new String[]{"Libellé"};
 
+    /**
+     * Constructor
+     */
     public EquipementFrame() {
         super();
         // Store in global variables

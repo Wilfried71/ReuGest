@@ -35,7 +35,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 /**
- *
+ * Settings frame (not finished)
  * @author tpeyr
  */
 public class SettingsFrame extends JFrame {
@@ -44,6 +44,9 @@ public class SettingsFrame extends JFrame {
     private JCheckBox chkDarkMode;
     private JButton cancelButton, validateButton;
 
+    /**
+     * Constructor
+     */
     public SettingsFrame() {
         super("Paramètres");
         this.setSize(new Dimension(360, 160));
@@ -108,6 +111,9 @@ public class SettingsFrame extends JFrame {
         }
     };
 
+    /**
+     * Load data from application.properties
+     */
     public void loadDataFromProperties() {
         /**
          * Load data from application.properties
@@ -130,6 +136,9 @@ public class SettingsFrame extends JFrame {
         }
     }
 
+    /**
+     * Load Look and feel (doesn't work)
+     */
     public void setLookAndFeelDarkOrWhite() {
         try {
             /**

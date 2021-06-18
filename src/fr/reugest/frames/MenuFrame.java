@@ -23,6 +23,10 @@ import fr.reugest.models.Droit;
 import fr.reugest.models.Salle;
 import fr.thomas.orm.Model;
 
+/**
+ * Main menu frame.
+ * @author tpeyr
+ */
 public class MenuFrame extends JFrame {
 
     private JPanel panneau;
@@ -31,6 +35,9 @@ public class MenuFrame extends JFrame {
             itemAbout, itemAdminReunions;
     private JMenuBar mb;
 
+    /**
+     * Constructor
+     */
     public MenuFrame() {
         super("ReuGest - Menu principal");
 

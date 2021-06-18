@@ -19,9 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 import fr.reugest.models.Equipement;
 import fr.reugest.models.Salle;
-import fr.reugest.models.Utilisateur;
 import fr.reugest.models.light.AffectationLight;
-import fr.reugest.models.light.ConcernerLight;
 import fr.reugest.models.light.SalleLight;
 import fr.thomas.orm.Model;
 import java.awt.event.ActionEvent;
@@ -32,6 +30,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+/**
+ * Frame for rooms management ({@link Salle} class).
+ * @author jean
+ */
 public class RoomsFrame extends BaseFrame {
 
     private static final long serialVersionUID = -5481781563859385889L;
@@ -53,6 +55,9 @@ public class RoomsFrame extends BaseFrame {
     private List<Equipement> listEquipements;
     private java.awt.List formListEquipements;
 
+    /**
+     * Constructor
+     */
     public RoomsFrame() {
         super();
         // Store in global variables
@@ -112,9 +117,6 @@ public class RoomsFrame extends BaseFrame {
                 txtPlaces.setText(selectedSalle.getPlaces().toString());
                 // Change selection
                 toggleSelectedEquipement();
-
-                // Change state to EDITING
-                state = BaseFrame.State.EDITING;
             }
         });
 
@@ -152,11 +154,6 @@ public class RoomsFrame extends BaseFrame {
         this.pRight.add(formListEquipements);
         this.loadEquipementsInJList();
 
-        /*for(Equipement e: listEquipements){
-            this.formListEquipements.add(new JLabel("Equipement : ", JLabel.RIGHT));
-            JCheckBox checkbox = new JCheckBox(e.getLibelle());
-            this.formListEquipements.add(checkbox);
-        }*/
         /**
          * Create empty JLabel to fill
          */
@@ -305,14 +302,12 @@ public class RoomsFrame extends BaseFrame {
 
         }
         this.table = new JTable(tableModel);
-
-        /*JScrollPane pane = new JScrollPane(table);
-        this.pLeft.add(pane);
-        this.table.setPreferredScrollableViewportSize(new Dimension(100, 100));
-        this.table.setFillsViewportHeight(true);*/
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
+    /**
+     * Load form list with equipements
+     */
     public void loadEquipementsInJList() {
 
         formListEquipements.removeAll();

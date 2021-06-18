@@ -3,7 +3,10 @@ package fr.reugest.models;
 import fr.thomas.orm.annotations.Column;
 import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
-
+/**
+ * Right of users ({@link Utilisateur}).
+ * @author tpeyr
+ */
 @Table(name = "droit")
 public class Droit {
 

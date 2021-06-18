@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Represente un cle etrangere
+ * Represent a foreign key constraint
  *
  * @author tpeyr
  *
@@ -15,7 +15,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ForeignKey {
 
+    /**
+     * Name of the foreign table in the database.
+     * @return the name of the table.
+     */
     String table();
 
+    /**
+     * Name of the primary key field in the foreign table in database.
+     * @return the name of the field.
+     */
     String field();
 }

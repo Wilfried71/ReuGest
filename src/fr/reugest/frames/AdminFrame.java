@@ -55,6 +55,9 @@ public class AdminFrame extends JFrame {
     
     private Reunion selectedReunion;
 
+    /**
+     * Constructor
+     */
     public AdminFrame() {
         super("Mon planning");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -103,6 +106,9 @@ public class AdminFrame extends JFrame {
         });
     }
 
+    /**
+     * Constructor
+     */
     public void loadInvalidEvents() {
         try {
             this.listReunions = this.reunionModel.query(
@@ -141,6 +147,9 @@ public class AdminFrame extends JFrame {
         this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
+    /**
+     * Create the context menu
+     */
     public void createContextMenu() {
         popupMenu = new JPopupMenu();
 

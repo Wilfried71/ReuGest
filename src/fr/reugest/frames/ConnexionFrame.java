@@ -59,6 +59,9 @@ public class ConnexionFrame extends JFrame {
     // create model
     private Model<Utilisateur> utilisateurModel = new Model<Utilisateur>(Utilisateur.class);
 
+    /**
+     * Connection frame.
+     */
     public ConnexionFrame() {
         super("Connexion");
         // Change icon

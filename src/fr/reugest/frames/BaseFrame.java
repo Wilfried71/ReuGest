@@ -30,7 +30,13 @@ public class BaseFrame extends JFrame {
      * content of the frame.
      */
     protected JPanel panel, pLeft, pCenter, pRight;
+    /**
+     * Buttons of the frame
+     */
     protected JButton validateButton, addButton, deleteButton;
+    /**
+     * Table that contains data
+     */
     protected JTable table;
     
     private int BUTTON_SIZE = 42;
@@ -38,15 +44,10 @@ public class BaseFrame extends JFrame {
     private int MIN_WIDTH = 720;
     private int MIN_HEIGHT = 420;
     
-    protected enum State {
-        READING,
-        EDITING,
-        CREATING
-    }
-    
-    protected State state;
-    
-    public BaseFrame() throws HeadlessException {
+    /**
+     * Template frame for this application.
+     */
+    public BaseFrame() {
         super("Base JFrame");
         // Instanciate components
         panel = new JPanel(null);
@@ -112,9 +113,6 @@ public class BaseFrame extends JFrame {
 
         // Set fullscreen
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        // Set state as reading
-        this.state = State.READING;
 
         // Change icon
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/logo_64.png")));

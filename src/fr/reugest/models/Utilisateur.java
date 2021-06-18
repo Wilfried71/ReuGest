@@ -5,6 +5,10 @@ import fr.thomas.orm.annotations.ForeignKey;
 import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
+/**
+ * User entity.
+ * @author tpeyr
+ */
 @Table(name = "utilisateur")
 public class Utilisateur {
 

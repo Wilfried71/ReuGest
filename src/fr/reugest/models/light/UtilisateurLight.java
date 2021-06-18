@@ -4,6 +4,10 @@ import fr.thomas.orm.annotations.Column;
 import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
+/**
+ * Light entity of {@link fr.reugest.models.Utilisateur}.
+ * @author tpeyr
+ */
 @Table(name = "utilisateur")
 public class UtilisateurLight {
 

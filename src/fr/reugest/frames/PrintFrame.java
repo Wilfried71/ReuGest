@@ -52,7 +52,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 /**
- *
+ * Print frame
  * @author tpeyr
  */
 public class PrintFrame extends JFrame {
@@ -64,6 +64,9 @@ public class PrintFrame extends JFrame {
     private List<Reunion> listReunions;
     private Model<Reunion> reunionModel;
 
+    /**
+     * Constructor
+     */
     public PrintFrame() {
         super("Mon planning");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -205,6 +208,9 @@ public class PrintFrame extends JFrame {
         });
     }
 
+    /**
+     * Load events from database and refresh planning
+     */
     public void loadEvents() {
         Calendar lundi = planning.getStartOfWeek();
         Calendar dimanche = planning.getEndOfWeek();

@@ -4,6 +4,10 @@ import fr.thomas.orm.annotations.Column;
 import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
+/**
+ * Service of {@link Utilisateur} in the society.
+ * @author tpeyr
+ */
 @Table(name = "Service")
 public class Service {
 

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation qui indique que le champ est relie a une colonne en base.
+ * Annotation that indicates which column in database is referenced by the property.
  *
  * @author tpeyr
  *
@@ -16,7 +16,8 @@ import java.lang.annotation.Target;
 public @interface Column {
 
     /**
-     * Nom du champ dans la base de donnees.
+     * Name of the field in the database.
+     * @return the name of the field.
      */
     String name();
 }

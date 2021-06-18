@@ -4,6 +4,10 @@ import fr.thomas.orm.annotations.Column;
 import fr.thomas.orm.annotations.PrimaryKey;
 import fr.thomas.orm.annotations.Table;
 
+/**
+ * Light entity of {@link fr.reugest.models.Fonction}.
+ * @author tpeyr
+ */
 @Table(name = "fonction")
 public class FonctionLight {
 

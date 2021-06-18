@@ -8,6 +8,10 @@ package fr.reugest.util;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 
+/**
+ * Advanced filter for JFileChooser, to save the export as PDF.
+ * @author tpeyr
+ */
 public class FileTypeFilter extends FileFilter {
 
     private String extension;

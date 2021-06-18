@@ -60,6 +60,9 @@ public class RoomCreateModal extends JFrame{
 
     private JPanel panel;
 
+    /**
+     * Constructor
+     */
     public RoomCreateModal() {
         super("Créer une salle");
 
@@ -187,6 +190,9 @@ public class RoomCreateModal extends JFrame{
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/logo_64.png")));
     }
 
+    /**
+     * Load all equipements
+     */
     public void loadFormData() {        
         try {
             this.listEquipements = equipementModel.findAll();

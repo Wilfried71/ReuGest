@@ -37,6 +37,9 @@ public class EquipementCreateModal extends JFrame {
 
     private JPanel panel;
 
+    /**
+     * Constructor
+     */
     public EquipementCreateModal() {
         super("Créer un équipement");
 

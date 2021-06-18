@@ -22,14 +22,14 @@ import fr.thomas.orm.annotations.Table;
 import fr.thomas.orm.interfaces.DAO;
 
 /**
- * Classe model qui sera derivee par les entites ratachees a la base de donnees.
+ * Main class of the ORM. Contains all main methods to access database.
  *
- * @author tpeyr
+ * @author Thomas PEYROT
  *
- * @param <T>
+ * @param <T> Type of the entity we want to link to the database.
  *
- * @implNote Attention ! Les contraintes de cle etrangere ne fonctionnent pas
- * sur les methodes create et update.
+ * Beware ! Foreign key constraints doesn't work with create and
+ * update methods. To use these methods, use a model class with no {@link ForeignKey}.
  */
 public class Model<T> implements DAO<T> {
 

@@ -30,6 +30,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
+/**
+ * Frame for user management ({@link Utilisateur} class).
+ * @author tpeyr
+ */
 public class UsersFrame extends BaseFrame {
 
     private static final long serialVersionUID = -5481781563859385889L;
@@ -54,6 +58,9 @@ public class UsersFrame extends BaseFrame {
 
     private String[] columns = new String[]{"Nom", "Prénom", "Email", "Fonction", "Service"};
 
+    /**
+     * Constructor
+     */
     public UsersFrame() {
         super();
         // Store in global variables
@@ -132,8 +139,6 @@ public class UsersFrame extends BaseFrame {
                             .setSelectedIndex(listFonctions.indexOf(getFonctionFromId(selectedUser.getFonction().getId())));
                     cboDroit.setSelectedIndex(listDroits.indexOf(getDroitFromId(selectedUser.getDroit().getId())));
                     cboService.setSelectedIndex(listServices.indexOf(getServiceFromId(selectedUser.getService().getId())));
-                    // Change state to EDITING
-                    state = State.EDITING;
                 }
 
             }
@@ -291,8 +296,8 @@ public class UsersFrame extends BaseFrame {
     /**
      * Return the function of the list from its id
      *
-     * @param id
-     * @return
+     * @param id id
+     * @return found function
      */
     public Fonction getFonctionFromId(Long id) {
         for (Fonction f : this.listFonctions) {
@@ -303,6 +308,12 @@ public class UsersFrame extends BaseFrame {
         return null;
     }
 
+     /**
+     * Return the droit of the list from its id
+     *
+     * @param id id
+     * @return found droit
+     */
     public Droit getDroitFromId(Long id) {
         for (Droit d : this.listDroits) {
             if (d.getId().equals(id)) {
@@ -312,6 +323,12 @@ public class UsersFrame extends BaseFrame {
         return null;
     }
 
+     /**
+     * Return the service of the list from its id
+     *
+     * @param id id
+     * @return found service
+     */
     public Service getServiceFromId(Long id) {
         for (Service s : this.listServices) {
             if (s.getId().equals(id)) {

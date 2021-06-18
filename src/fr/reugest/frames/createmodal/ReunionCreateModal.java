@@ -59,6 +59,9 @@ public class ReunionCreateModal extends JFrame {
 
     private Salle selectedSalle;
 
+    /**
+     * Constructor
+     */
     public ReunionCreateModal() {
         super("Créer une réunion");
 
@@ -249,6 +252,9 @@ public class ReunionCreateModal extends JFrame {
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/logo_64.png")));
     }
 
+    /**
+     * Fill the form list with users.
+     */
     public void fillUserList() {
         formUserList.removeAll();
         for (Utilisateur u : userList) {

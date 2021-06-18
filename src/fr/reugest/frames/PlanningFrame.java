@@ -50,6 +50,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * Planning frame.
+ * @author tpeyr
+ */
 public class PlanningFrame extends BaseFrame {
 
     private static final long serialVersionUID = -5481781563859385889L;
@@ -88,6 +92,9 @@ public class PlanningFrame extends BaseFrame {
     // Salle selected in header
     private Salle selectedSalle;
 
+    /**
+     * Constructor
+     */
     public PlanningFrame() {
         super();
         // Store in global variables
@@ -304,6 +311,9 @@ public class PlanningFrame extends BaseFrame {
         });
     }
 
+    /**
+     * If simple user, block access to Create/Update/Delete
+     */
     public void addRightsToForm() {
         // Simple user
         if (Globals.user.getDroit().getId().equals(1L)) {
@@ -384,12 +394,22 @@ public class PlanningFrame extends BaseFrame {
         return events;
     }
 
+    /**
+     * Convert a {@link Date} to {@link LocalDate}.
+     * @param dateToConvert date
+     * @return converted localdate
+     */
     public LocalDate toLocalDate(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
     }
 
+    /**
+     * Convert a {@link Date} to {@link LocalDate}.
+     * @param d date
+     * @return converted localtime
+     */
     public LocalTime toLocalTime(Date d) {
         return LocalDateTime.ofInstant(d.toInstant(),
                 ZoneId.systemDefault()).toLocalTime();
@@ -398,8 +418,8 @@ public class PlanningFrame extends BaseFrame {
     /**
      * Return the salle of the list from its id
      *
-     * @param id
-     * @return
+     * @param id id
+     * @return the found salle
      */
     public Salle getSalleFromId(Long id) {
         for (Salle s : this.listSalle) {
@@ -410,6 +430,9 @@ public class PlanningFrame extends BaseFrame {
         return null;
     }
 
+    /**
+     * Fill form list with users
+     */
     public void fillUserList() {
         formUserList.removeAll();
         for (Utilisateur u : listUsers) {

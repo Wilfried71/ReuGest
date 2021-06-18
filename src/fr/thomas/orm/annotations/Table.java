@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation qui permet de renseigner le nom de la table
+ * Annotation that indicates the referenced table in the database.
  *
  * @author tpeyr
  *
@@ -16,7 +16,8 @@ import java.lang.annotation.Target;
 public @interface Table {
 
     /**
-     * Nom de la table dans la base de donnees.
+     * Name of the table in the database.
+     * @return the name of the table.
      */
     String name();
 }

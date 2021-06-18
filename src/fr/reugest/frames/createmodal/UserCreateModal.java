@@ -51,6 +51,9 @@ public class UserCreateModal extends JFrame {
 
     private JPanel panel;
 
+    /**
+     * Constructor
+     */
     public UserCreateModal() {
         super("Créer un utilisateur");
 

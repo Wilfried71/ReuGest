@@ -11,6 +11,10 @@ import java.util.Date;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+/**
+ * Event that is displayed on {@link JScheduler}.
+ * @author tpeyr
+ */
 public class JEvent extends JComponent {
 
     private Color backgroundColor;
