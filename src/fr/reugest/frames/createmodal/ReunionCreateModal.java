@@ -169,8 +169,10 @@ public class ReunionCreateModal extends JFrame {
                 fin.set(Calendar.DAY_OF_MONTH, datePicker.getDate().getDayOfMonth());
                 fin.set(Calendar.HOUR_OF_DAY, timePickerFin.getTime().getHour());
                 fin.set(Calendar.MINUTE, timePickerFin.getTime().getMinute());
-                fin.set(Calendar.SECOND, 0);
-
+                fin.set(Calendar.SECOND, 0);                
+                fin.set(Calendar.MILLISECOND,0);
+                fin.add(Calendar.SECOND, -1); // add little delay
+                
                 // Set attributes
                 r.setMotif(txtMotif.getText());
                 r.setDebut(debut.getTime());
@@ -183,8 +185,8 @@ public class ReunionCreateModal extends JFrame {
                     List<Reunion> overlapEvents = new ArrayList<>();
                     try {
                         overlapEvents = reunionModel.query(
-                                "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=? AND salle = ? AND id != ?",
-                                Arrays.asList(debut.getTime(), fin.getTime(), true, r.getIdSalle(), r.getId()));
+                                "SELECT * FROM Reunion WHERE fin >= ? AND debut <= ? AND salle = ?",
+                                Arrays.asList(debut.getTime(), fin.getTime(), r.getIdSalle()));
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
                     }
@@ -225,7 +227,7 @@ public class ReunionCreateModal extends JFrame {
                             JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Vous ne pouvez pas déplacer cette réunion à ce moment là.\nUne autre réunion occupe déjà ce créneau.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Vous ne pouvez pas créer cette réunion à ce moment là.\nUne autre réunion occupe déjà ce créneau.\n\nSi aucune réunion n'est visible sur le planning, veuillez contacter l'administrateur.", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Le début ne peut pas être après la fin.", "Erreur", JOptionPane.ERROR_MESSAGE);

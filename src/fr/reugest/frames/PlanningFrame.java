@@ -237,10 +237,9 @@ public class PlanningFrame extends BaseFrame {
         this.pRight.add(this.validateButton);
         this.validateButton.setEnabled(false);
         this.pRight.setBorder(new EmptyBorder(10, 10, 10, 10));
-        // Validate button action listener
 
-        //Add button rights access
-        this.addRightsToAddButton();
+        // Add rights access
+        this.addRightsToForm();
 
         // Add button event listener
         validateButton.addActionListener(new ActionListener() {
@@ -305,11 +304,12 @@ public class PlanningFrame extends BaseFrame {
         });
     }
 
-    public void addRightsToAddButton() {
+    public void addRightsToForm() {
         // Simple user
         if (Globals.user.getDroit().getId().equals(1L)) {
             addButton.setVisible(false);
             deleteButton.setVisible(false);
+            validateButton.setVisible(false);
             txtMotif.setEnabled(false);
             datePicker.setEnabled(false);
             timePickerDebut.setEnabled(false);
@@ -481,7 +481,8 @@ public class PlanningFrame extends BaseFrame {
         fin.set(Calendar.HOUR_OF_DAY, timePickerFin.getTime().getHour());
         fin.set(Calendar.MINUTE, timePickerFin.getTime().getMinute());
         fin.set(Calendar.SECOND, 0);
-
+        fin.add(Calendar.SECOND, -1);
+        
         // Set attributes
         r.setId(selectedReunion.getId());
         r.setMotif(txtMotif.getText());
@@ -495,8 +496,8 @@ public class PlanningFrame extends BaseFrame {
             List<Reunion> overlapEvents = new ArrayList<>();
             try {
                 overlapEvents = reunionModel.query(
-                        "SELECT * FROM Reunion WHERE fin > ? AND debut < ? and isValid=? AND salle = ? AND id != ?",
-                        Arrays.asList(debut.getTime(), fin.getTime(), true, r.getIdSalle(), r.getId()));
+                        "SELECT * FROM Reunion WHERE fin > ? AND debut < ? AND salle = ? AND id != ?",
+                        Arrays.asList(debut.getTime(), fin.getTime(), r.getIdSalle(), r.getId()));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
             }
@@ -535,7 +536,7 @@ public class PlanningFrame extends BaseFrame {
                     JOptionPane.showMessageDialog(null, "Erreur : " + ex.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Vous ne pouvez pas déplacer cette réunion à ce moment là.\nUne autre réunion occupe déjà ce créneau.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Vous ne pouvez pas déplacer cette réunion à ce moment là.\nUne autre réunion occupe déjà ce créneau.\n\nSi aucune réunion n'est visible sur le planning, veuillez contacter l'administrateur.", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Le début ne peut pas être après la fin.", "Erreur", JOptionPane.ERROR_MESSAGE);
