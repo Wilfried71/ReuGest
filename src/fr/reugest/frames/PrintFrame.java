@@ -5,6 +5,7 @@
  */
 package fr.reugest.frames;
 
+import fr.reugest.main.FileTypeFilter;
 import fr.reugest.main.Globals;
 import fr.reugest.models.Reunion;
 import fr.thomas.orm.Model;
@@ -12,29 +13,41 @@ import fr.thomas.swing.JEvent;
 import fr.thomas.swing.JScheduler;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileFilter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
 /**
  *
@@ -100,11 +113,69 @@ public class PrintFrame extends JFrame {
                 planning.nextWeek();
                 loadEvents();
             }
-        });        
+        });
         btnPrint.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                exportAsImage();
+                try {
+
+                    /**
+                     * Get destination
+                     */
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.setDialogTitle("Choisissez un emplacement pour le fichier");
+                    // File filter
+                    FileFilter ff = new FileTypeFilter(".pdf", "Fichiers PDF");
+                    fileChooser.setFileFilter(ff);
+                    int result = fileChooser.showSaveDialog(null);
+                    /**
+                     * If selected file
+                     */
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        // Take screenshot of planning component
+                        File screenshot = getScreenShot();
+                        // Create pdf
+                        File pdf = fileChooser.getSelectedFile();
+
+                        String dest = pdf.getAbsolutePath() + ".pdf";
+                        PDDocument document = new PDDocument();
+
+                        // Create page
+                        PDPage page = new PDPage(new PDRectangle(PDRectangle.A4.getHeight(), PDRectangle.A4.getWidth()));
+                        document.addPage(page);
+                        PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                        // Write title
+                        String title = "Planning de " + Globals.user.getNom() + " " + Globals.user.getPrenom() + " : Semaine du " + getStringFromDate(planning.getStartOfWeek().getTime()) + " au " + getStringFromDate(planning.getEndOfWeek().getTime());
+                        PDFont font = PDType1Font.HELVETICA_BOLD;
+                        int marginTop = 5;
+                        int fontSize = 14; // Or whatever font size you want.
+                        float titleWidth = font.getStringWidth(title) / 1000 * fontSize;
+                        float titleHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+                        contentStream.beginText();
+                        contentStream.setFont(font, fontSize);
+                        contentStream.newLineAtOffset((page.getMediaBox().getWidth() - titleWidth) / 2, page.getMediaBox().getHeight() - marginTop - titleHeight);
+                        contentStream.showText(title);
+                        contentStream.endText();
+
+                        //IMG
+                        PDImageXObject img = PDImageXObject.createFromFile("export.png", document);
+                        contentStream.drawImage(img, 20, 10, PDRectangle.A4.getHeight() - 40, PDRectangle.A4.getWidth() - 40);
+                        // Save document in destination
+                        contentStream.close();
+                        document.save(dest);
+                        document.close();
+
+                        // Delete temp screenshot
+                        screenshot.delete();
+                        
+                        // Open new file
+                        Desktop.getDesktop().open(new File(dest));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Erreur", JOptionPane.WARNING_MESSAGE);
+                }
             }
         });
     }
@@ -145,15 +216,15 @@ public class PrintFrame extends JFrame {
         return events;
     }
 
-    private void exportAsImage() {
-        
+    private File getScreenShot() {
+
         /**
          * Remove bar for screenshot
          */
         planning.getCalendar().set(Calendar.HOUR_OF_DAY, 1);
         Calendar now = Calendar.getInstance();
         planning.refresh();
-        
+
         /**
          * Take screenshot
          */
@@ -163,7 +234,7 @@ public class PrintFrame extends JFrame {
         planning.printAll(g);
         g.dispose();
         try {
-            ImageIO.write(image, "png", new File("D://test.png"));
+            ImageIO.write(image, "png", new File("export.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -172,5 +243,11 @@ public class PrintFrame extends JFrame {
          */
         planning.getCalendar().set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
         planning.refresh();
+        return new File("export.png");
+    }
+
+    private String getStringFromDate(Date d) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.format(d);
     }
 }

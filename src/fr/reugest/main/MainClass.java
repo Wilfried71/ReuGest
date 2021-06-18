@@ -40,6 +40,7 @@ public class MainClass {
         }
 
         try {
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if(props.getProperty("dark.mode") == null || !props.getProperty("dark.mode").equals("true")) {
                 //UIManager.setLookAndFeel(new FlatIntelliJLaf());
             } else {
