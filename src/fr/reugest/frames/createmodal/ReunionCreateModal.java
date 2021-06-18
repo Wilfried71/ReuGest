@@ -180,7 +180,8 @@ public class ReunionCreateModal extends JFrame {
                 r.setMotif(txtMotif.getText());
                 r.setDebut(debut.getTime());
                 r.setFin(fin.getTime());
-                r.setIsValid(true);
+                // If connected as admin, set automatically to true, else ask permission
+                r.setIsValid(Globals.user.getDroit().getId().equals(3L));
                 r.setIdSalle(((Salle) cboSalles.getSelectedItem()).getId());
 
                 if (!debut.after(fin)) {
