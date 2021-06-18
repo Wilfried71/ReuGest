@@ -317,6 +317,9 @@ public class PlanningFrame extends BaseFrame {
             cboSalles.setEnabled(false);
             formUserList.setEnabled(false);
         }
+        if (Globals.user.getDroit().getId().equals(2L)) {
+            deleteButton.setVisible(false);
+        }
     }
 
     /**
@@ -452,6 +455,8 @@ public class PlanningFrame extends BaseFrame {
         }
         return -1;
     }
+    
+     
 
     /**
      * Update the event
