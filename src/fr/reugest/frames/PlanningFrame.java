@@ -476,7 +476,8 @@ public class PlanningFrame extends BaseFrame {
         fin.set(Calendar.HOUR_OF_DAY, timePickerFin.getTime().getHour());
         fin.set(Calendar.MINUTE, timePickerFin.getTime().getMinute());
         fin.set(Calendar.SECOND, 0);
-
+        fin.add(Calendar.SECOND, -1);
+        
         // Set attributes
         r.setId(selectedReunion.getId());
         r.setMotif(txtMotif.getText());
