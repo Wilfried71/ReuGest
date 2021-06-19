@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- *
+ *  assertEquals() ne marche pas
  * @author tpeyr
  */
 public class UtilisateurTest {
@@ -36,7 +36,7 @@ public class UtilisateurTest {
         Utilisateur instance = new Utilisateur();
         assertNull(instance.getId());
         instance.setId(123L);
-        assertEquals(instance.getId(), 123L);
+        assertTrue(instance.getId().equals(123L));
         System.out.println("testId works !");
     }
 
@@ -46,7 +46,8 @@ public class UtilisateurTest {
         Utilisateur instance = new Utilisateur();
         assertNull(instance.getNom());
         instance.setNom("Toto");
-        assertEquals(instance.getNom(), "Toto");
+        assertTrue(instance.getNom().equals("Toto"));
+        //assertEquals(instance.getNom(), "Toto");
         System.out.println("testNom works !");
     }
 
@@ -55,8 +56,9 @@ public class UtilisateurTest {
     public void testPrenom() {
         Utilisateur instance = new Utilisateur();
         assertNull(instance.getPrenom());
-        instance.setNom("Titi");
-        assertEquals(instance.getPrenom(), "Titi");
+        instance.setPrenom("Titi");
+        assertTrue(instance.getPrenom().equals("Titi"));
+        //assertEquals(instance.getPrenom(), "Titi");
         System.out.println("testPrenom works !");
     }
 
@@ -65,7 +67,8 @@ public class UtilisateurTest {
         Utilisateur instance = new Utilisateur();
         assertNull(instance.getEmail());
         instance.setEmail("monemail@gmail.com");
-        assertEquals(instance.getEmail(), "monemail@gmail.com");
+        assertTrue(instance.getEmail().equals("monemail@gmail.com"));
+        //assertEquals(instance.getEmail(), "monemail@gmail.com");
         System.out.println("testEmail works !");
     }
 
@@ -75,7 +78,8 @@ public class UtilisateurTest {
         Utilisateur instance = new Utilisateur();
         assertNull(instance.getPassword());
         instance.setPassword("M0tD3Passe123!");
-        assertEquals(instance.getPassword(), "M0tD3Passe123!");
+        assertTrue(instance.getPassword().equals("M0tD3Passe123!"));
+        //assertEquals(instance.getPassword(), "M0tD3Passe123!");
         System.out.println("testPassword works !");
     }
 
@@ -83,9 +87,10 @@ public class UtilisateurTest {
     public void testDroit() {
         Utilisateur instance = new Utilisateur();
         Droit droit = new Droit(1L,"Administrateur");
-        assertNull(instance.getDroit());
+        assertNull(instance.getDroit());        
         instance.setDroit(droit);
-        assertEquals(instance.getDroit(), droit);
+        assertTrue(instance.getDroit().equals(droit));
+        //assertEquals(instance.getDroit(), droit);
         System.out.println("testDroit works !");
     }
 
@@ -95,7 +100,8 @@ public class UtilisateurTest {
         Service service = new Service(1L,"Informatique");
         assertNull(instance.getService());
         instance.setService(service);
-        assertEquals(instance.getService(), service);
+        assertTrue(instance.getService().equals(service));
+        //assertEquals(instance.getService(), service);
         System.out.println("testService works !");
     }
 
@@ -105,7 +111,8 @@ public class UtilisateurTest {
         Fonction fonction = new Fonction(1L,"DRH");
         assertNull(instance.getFonction());
         instance.setFonction(fonction);
-        assertEquals(instance.getFonction(), fonction);
+        assertTrue(instance.getFonction().equals(fonction));
+        //assertEquals(instance.getFonction(), fonction);
         System.out.println("testFonction works !");
     }
     
@@ -114,14 +121,16 @@ public class UtilisateurTest {
         Utilisateur instance = new Utilisateur();
         assertNull(instance.getIsDeleted());
         instance.setIsDeleted(false);
-        assertEquals(instance.getIsDeleted(), false);
+        assertTrue(instance.getIsDeleted().equals(false));
+       // assertEquals(instance.getIsDeleted(), false);
         System.out.println("testIsDeleted works !");
     }
 
     @Test
     public void testToString() {
-        Utilisateur instance = new Utilisateur();
-        assertEquals(instance.toString(), " ");
+        Utilisateur instance = new Utilisateur(1L,"OUILDOL","Yves","ol@ol.fr","123",null,null,null,false);
+        assertTrue(instance.toString().equals("OUILDOL Yves"));
+        //assertEquals(instance.toString(), " ");
         System.out.println("testToString works !");
     }
     

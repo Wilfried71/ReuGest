@@ -26,6 +26,7 @@ import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -131,7 +132,7 @@ public class ConnexionFrame extends JFrame {
                         }
 
                     } catch (Exception ex) {
-                        System.out.println(ex);
+                        JOptionPane.showMessageDialog(null, ex.getMessage(),"Erreur",JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
