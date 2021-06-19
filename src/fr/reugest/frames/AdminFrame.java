@@ -59,7 +59,7 @@ public class AdminFrame extends JFrame {
      * Constructor
      */
     public AdminFrame() {
-        super("Mon planning");
+        super("Gestion des demandes");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setMinimumSize(new Dimension(1020, 720));
         setLocationRelativeTo(null);
